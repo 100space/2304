@@ -128,3 +128,147 @@ Minning은 블록체인에서 새로운 블록을 생성하는 과정을 말하�
 4. 채굴자는 블록 헤더에 3번 과정에서 얻은 해시값(이전 블록 해시값), 새로운 블록의 트랜잭션을 이용한 머클루트, 생성시간, 난이도, 채굴자의 고유한 임의의 값인 논스(Nonce)를 추가한다.
 5. 채굴자는 블록의 해시값이 일정 기준 이하인지 검증하는 작업을 수행하고, 만약 기준 이상이라면 논스를 변경하여 블록의 해시값을 다시 구해서 검증한다. 기준 이하가 된다면 블록을 블록체인 네트워크에 전파한다.
 6. 다른 노드들은 이 생성된 블록을 검증하고, 이전 블록과의 연결성 및 새로운 트랜잭션의 유효성을 확인한다. 모든 노드가 동의할 경우, 해당 블록이 블록체인에 추가되어 원장이 업데이트 된다.
+
+# 객체 지향 프로그래밍(OOP)
+
+객체 개념을 기반으로 하는 프로그래밍이다.
+복잡하지만 모듈식이여서 재사용 가능하다.
+객체 지향 프로그래밍을 하게 된다면 얻는 이점으로 모듈성, 재사용성, 유연성, 유지보수성이 있다.
+
+-   모듈성 : 작고, 관리하기 쉬운 단위로 나누어서 데이터와 동작을 캡슐화하여 코드를 더 쉽게 이해하고 유지 관리 할 수 있다.
+-   재사용성 : 상속과 구성을 통해 코드의 재사용성을 높였다. 기존 클래스를 확장하거나, 결합하는 클래스를 생성하여 중복 코드를 작성할 필요성을 줄일 수 있다.
+-   유연성 : 요구사항에 유연하게 대처할 수 있는 코드를 만들 수 있다. 쉽게 수정 가능하고, 확장할 수 있다.
+-   유지보수성 : 이해하기 쉽고 유지보수하기 쉬운 코드를 작성할 수 있다.
+
+## 객체지향설계 5대원칙 (SOLID)
+
+객체 지향 프로그래밍을 잘 구성하기 위해서 크게 원칙을 5가지로 나누었는데, 이를 SOLID 원칙이라고 불린다.
+
+-   S(SRP : Single reponsibility principle) : **단일 책임 원칙**으로 한 클래스는 하나의 책임만 가져야 한다. 작성된 클래스는 하나의 기능만 가지며 클래스가 제공하는 모든 서비스는 하나의 책임을 수행하는데 집중되어 있어야 한다.는 원칙이다.
+-   O (OCP : Open/Closed Principle) : **개방-폐쇄의 원칙**으로 소프트웨어의 구성요소(컴포넌트, 클래스, 모듈, 함수)는 확장에 열려있고, 변경에는 닫혀있어야 한다는 원리이다. 요구사항의 변경이나 추가 사항이 생기더라도, 기존 구성요소는 수정이 일어나지 말고, 기존 구성요소를 쉽게 확장해서 재사용할 수 있어야한다는 뜻이다.
+-   L (LSP : Liskov Substitution Principle) : **리스코프 치환 원칙**으로 프로그램의 객체는 프로그램의 정확성에 영향을 미치지 않으면서 하위 클래스의 인스턴스로 바꿀 수 있어야한다.
+-   I (ISP : Interface Segregation Principle) : **인터페이스 분리 원칙**으로 사용하지 않는 인터페이스는 구현하지 말아야 한다는 원리이다. 하나의 일반적인 인터페이스보다 여러개의 구체적인 인터페이스가 더 낫다고 정의할 수 있다.
+-   D (DIP : Dependency Inversion Principle) : **의존성 역전의 원칙**으로 고수준 모듈이 저수준 모듈에 의존해서는 안된다.는 의미이다. 즉, 추상화에 의존해야지, 구체화에 의존하면 안된다.라고 할 수 있다. 의존성 주입은 이 원칙을 따른다.
+
+## 추상화와 구체화
+
+추상화 : 가장 중요한 것에 집중하기 위해서 시스템이나 아이디어에 풀필요한 세부 사항을 제거하는 것.
+구체화 : 추상적인 아이디어나 시스템을 취하고, 이를 구체적으로 구현하는 과정이다. 구체화 하는 과정에서 세부사항을 추가하고 시스템의 특정 동작 및 속성을 정의하는 작업이 포함된다.
+
+### 예시 1
+
+```js
+// 추상화
+class Shape {
+    drow() {}
+    getArea() {}
+}
+
+class Square extends Shape {
+    constructor(length) {
+        super()
+        this.length = length
+    }
+    draw() {}
+    getArea() {
+        return this.length * this.length
+    }
+}
+
+//구체화
+const square = new Square(5)
+square.draw()
+console.log(square.getArea())
+```
+
+### 예시 2
+
+```js
+//추상화
+class Animal {
+    constructor(name, type) {
+        this.name = name
+        this.type = type
+    }
+    speak() {}
+}
+
+class Dog extends Animal {
+    constructor(name) {
+        super(name, "dog")
+    }
+    speak() {
+        return "Woof!!"
+    }
+}
+class Cat extends Animal {
+    constructor(name) {
+        super(name, "cat")
+    }
+    speak() {
+        return "Meow!"
+    }
+}
+function makeAnimalSpeak(animal) {
+    console.log(animal.name + ":" + animal.speak())
+}
+
+//구체화
+const dog = new Dog("Fido")
+const cat = new Cat("Whiskers")
+
+console.log(dog.speak()) // Woof!!
+console.log(cat.speak()) // Meow!
+
+makeAnimalSpeak(dog) //Fido : Woof!!
+makeAnimalSpeak(cat) // Whiskers : Meow!
+```
+
+### 예시 3
+
+```js
+class Vehicle () {
+    constructor (color, brand, model){
+        this.color = color
+        this.brand = brand
+        this.model = model
+    }
+    start () {
+
+    }
+}
+
+class Car extends Vehicle{
+    constructor (color, brand, model, numDoors) {
+        super(color, brand, model)
+        this.numDoors = numDorrs
+    }
+    start(){
+        return "The" + this.color + " " + this. brand + " " + this.model + " starts with a key"
+    }
+}
+
+class Motorcycle extends Vehicle {
+    constructor (color, brnad, model){
+        super(color, brnad, model)
+    }
+    start () {
+        return "The "+this.color + " " +this.brnad + " " + this.model + " starts whit a kick-start"
+    }
+    function startVehicle(vehicle) {
+        console.log(vehicle.start())
+    }
+}
+
+
+//구체화
+
+const car = new Car ("red", "Ford", "Mustang", 2)
+const motorcycle = new Motorcycle ("black", "Harley Davidson", "Softail")
+
+console.log(car.start())
+console.log(motorcycle.start())
+
+startVehicle(car) // The red Ford Mustang starts with a key
+startVehicle(motorcycle) // The black Harley Davidson Softail starts with a kick-start
+```

@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "module": "CommonJS", // 번들링 되었을 때 commonJS로 한다는 뜻.
+        "outDir": "./dist",
+        "target": "ES6",
+        "esModuleInterop": true,
+        "strict": true,
+        "baseUrl": "./src",
+        "paths": {
+            // @ 변수라 없어도 되지만 개발자끼리 정한 별칭이라는 약속
+            // user앞에 baseUrl이 생략된거임
+            "@user/*": ["user/*"]
+        }
+    },
+    "include": ["src/*"],
+    "exclude": ["**/*.test.ts"] // 제외
+}
