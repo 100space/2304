@@ -286,3 +286,55 @@ npm install -D tsconfig-paths
 
 tsc-alias 와 tsconfig-paths는 표면적으로 별칭을 실제 경로로 표시 될 수 있도록 도와주는 라이브러리로 비슷한 역할을 가지지만 약간의 차이점이 있다. tsc-alias의 경우에는 주로 빌드를 위한 컴파일하는 과정에서 필요한 것이고,
 tsconfig-paths는 ts-node를 이용하여 컴파일을 하지 않고도 TS코드를 직접 실행할 때에 tsconfig.json 파일에 지정해 놓은 paths 속성을 올바른 경로로 바꿀 때 사용하는 패키지 이다.
+
+# nodemon
+
+Node.js 환경에서 작성되는 코드는 소스코드가 변경될 때 실행되는 파일을 중지 후 재시작해야 변경된 코드를 적용시켜서 보여준다. 하지만 Nodemon을 사용하게 되면, 코드를 변경할 때 자동으로 다시 시작해서 바로 반영되어 보여줄 수 있다.
+
+## 1. 관련 패키지 설치
+
+```sh
+$ npm install -D nodemon
+```
+
+## 2. nodemon.json
+
+Nodemon을 실행할 때 여러 옵션이 있는데, 이를 json 파일로 따로 관리하여 nodemon을 실행 시킬 수 있다. 여러 옵션이 있지만 중요한 옵션 3가지는 "watch","ext","exec" 이다.
+
+```json
+{
+    // 어떤 디렉토리 안에 있는 파일을 추적할 것인가?
+    "watch": [], // ex) ["src/**/*"]
+
+    // 어떤 확장자를 추적할 것인가?
+    "ext": "", // ex) "ts"
+
+    //  변경이 감지되면 어떤 명령어를 실행할 것인가 ?
+    "exec": "" // ex) "ts-node -r tsconfig-paths/register ./src/[실행시킬 파일이름]
+}
+```
+
+## 3. nodemon 실행하기
+
+node ~~ 를 이용하여 실행했던 것을 nodemon을 이용하여 실행해야 한다.
+
+```sh
+# nodemon 사용 전
+$ node app.js
+
+# nodemon 사용 후
+$ nodemon app.js
+```
+
+일괄적으로 관리하기 위해서 package.json의 script를 이용할 수 있다.
+
+```json
+//package.json
+{
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "nodemon",
+        "build": "tsc"
+    }
+}
+```
