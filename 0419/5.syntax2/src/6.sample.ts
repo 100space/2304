@@ -3,7 +3,7 @@ interface IProduct {
     price: number
 }
 
-class Product {
+class ProductEx {
     private name: string
     private price: number
     private discountAmount: number
@@ -27,7 +27,7 @@ class Product {
         this.discountAmount = amount
     }
 }
-const productEX = new Product("상품", 1000)
+const productEX = new ProductEx("상품", 1000)
 // console.log(productEX.getPrice())
 
 // productEX.setDisCountAmount(200)

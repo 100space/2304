@@ -1,0 +1,21 @@
+{
+    "name": "0420",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "nodemon",
+        "bulid": "tsc"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "nodemon": "^2.0.22",
+        "ts-node": "^10.9.1",
+        "tsc-alias": "^1.8.5",
+        "tsconfig-paths": "^4.2.0",
+        "typescript": "^5.0.4"
+    }
+}
