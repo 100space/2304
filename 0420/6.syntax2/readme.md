@@ -255,21 +255,20 @@ I: ISP: 기능에 대한 인터페이스를 잘게 쪼개서 사용하자. (너�
 
 D: DIP: `의존`
 
-# 데이터 은닉화 : private를 이용하여 객체를 생성한 후에 접근이 불가능하게 할 수 있다.
+# 데이터 은닉화
 
-인스턴스를 생성했을 때 접근 할 수 있냐, 없냐에 따라서 private , public 으로 나눈다.
+클래스의 내부 상태에 대한 접근을 불가능하게 하고 메서드를 통해 제어된 액세스를 제공하기 위해서 사용되는 OOP 기법이다. 데이터를 은닉하게 되면 내부의 상태가 일관되게 유지되고, 무단으로 수정되는 것을 방지할 수 있다.
+데이터 은닉화를 하는 방법은 private를 이용하여 객체를 생성하면 된다. 인스턴스를 생성했을 때 접근 할 수 있냐, 없냐에 따라서 private , public 으로 나눈다.
 
-클래스 내부에서는 사용할 수 있다.
-
-매개변수도 provate를 이용해서 작성할 수 있따.
+클래스 내부에서는 사용할 수 있지만, 인스턴스 생성 후에 상태를 접근할 수는 없다. 생성자 함수의 매개변수도 provate를 이용해서 작성할 수 있다.
 
 ```ts
 class Auth {
-    private email: string
+    // private email: string // 생략가능
     private password: string
 
     constructor(private readonly email: string, password: string) {
-        this.email = email
+        // this.email = email //생략가능
         this.password = password
     }
     public login(): void {}
@@ -280,7 +279,9 @@ const auth = new Auth("baekspace@a.com", "123123")
 console.log(auth.email) //  error TS2341: Property 'email' is private and only accessible within class 'Auth'.
 ```
 
-보통 ~~ 는 private이고 메서드는 public 이다.
+보통 클래스에서 상태변수는 private이고 메서드는 public 이다.
+
+TypeScript에서는 readonly로 지정된 매개변수에 대해서는 생성자 함수에서 제거할 수 있다.
 
 # SRP
 
