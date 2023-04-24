@@ -1,14 +1,22 @@
 {
     "compilerOptions": {
-        "module": "CommonJS",
-        "outDir": "./dist",
-        "esModuleInterop": true,
+        "module": "commonJS",
+        "outDir": "dist",
         "target": "ES6",
+        "esModuleInterop": true, // import React form 'react'
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
         "strict": true,
-        "lib": ["DOM"],
-        "baseUrl": "./",
-        "paths": {}
+        "typeRoots": ["node_modules/@types", "src/@types"],
+        "types": ["jest"],
+        "baseUrl": "./src",
+        "paths": {
+            "@/*": ["*"],
+            "@types/*": ["types/*"],
+            "@core/*": ["core/*"],
+            "@exception/*": ["exceptions/*"]
+        }
     },
-    "include": ["./src/**/*"],
-    "exclude": ["**/*.test.ts"]
+    "include": ["./src/**/*", "@types/*", "__tests__"],
+    "exclued": ["node_modules"]
 }
