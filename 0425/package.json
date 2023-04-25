@@ -25,7 +25,13 @@
         "preset": "ts-jest",
         "testEnvironment": "node",
         "moduleNameMapper": {
-            "^@(board|comment|core)/(.+)$": "<rootDir>/src/$1/$2"
+            "^@(board|constasnts|core|types)/(.+)$": "<rootDir>/src/$1/$2"
         }
+    },
+    "dependencies": {
+        "@types/crypto-js": "^4.1.1",
+        "@types/merkle": "^0.6.1",
+        "crypto-js": "^4.1.1",
+        "merkle": "^0.6.0"
     }
 }

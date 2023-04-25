@@ -10,10 +10,13 @@
         "typeRoots": ["node_modules/@types", "src/@types"],
         "types": ["jest"],
         "baseUrl": "./src",
+        "lib": ["ES2017"],
         "paths": {
             "@board/*": ["board/*"],
             "@comment/*": ["comment/*"],
-            "@types/*": ["types/*"]
+            "@types/*": ["types/*"],
+            "@core/*": ["core/*"],
+            "@constasnts/*": ["constasnts/*"]
         }
     },
     "include": ["./src/**/*", "@types/*", "__tests__"],
