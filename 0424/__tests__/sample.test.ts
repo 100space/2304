@@ -1,79 +1,42 @@
-//user.controller
-describe("user controller 검증", () => {
-    console.log("hello")
-    it("create()함수 잘 실행되는가?", () => {
-        //req.body
-        //service 메서드 잘 작동하는지
-        //res.send res.json 내가 원한느 객체가 잘 들어가는지?
-        //expect, matcher
-        expect(1).toEqual(1)
-    })
-    test("create() 메서드 예외 처리가 잘되는가", () => {
-        //req.body 강제로 다른값을 만들어서
-        // service 메서드 호출을 강제로 에러 터트림
-        // catch 문으로 잘 빠지는
-        // next 함수가 잘 작동하는지
-        expect(1).toEqual(2)
-    })
-})
+import { BoardRepository, BoardWriteDTO } from "@board/board.interfaces"
+import BoardService from "@board/board.service"
 
-class UserController {
-    public num: number = 0
-    constructor() {}
-    create() {}
-}
-
-interface BoardRepository {
-    getUserById: () => void
-}
-
-interface boardWriteDTO {
-    email: string
-    subject: string
-    content: string
-    hashtag: string
-    category: string
-    images: string
-    thumbnail: string
-}
-class BoardService {
-    constructor(private readonly boardRepository: BoardRepository) {}
-    public postWrite(data: boardWriteDTO) {}
-}
-class boardController {
-    constructor(private readonly boardService: BoardService) {}
-    public write(req, res, next) {
-        const data: boardWriteDTO = {
-            email: "",
-            subject: "",
-            content: "",
-            hashtag: "",
-            category: "",
-            images: "",
-            thumbnail: "",
-        }
-        this.boardService.postWrite(data)
-    }
-}
-describe("Test 1", () => {
-    let result: { name: string } = { name: "" }
-    let user: UserController
-
-    afterAll(() => {})
-    afterEach(() => {})
-    beforeAll(() => {
-        result = { name: "hello world" }
-    })
+describe("Board.service", () => {
+    let boardService: BoardService
+    let boardRepository: BoardRepository
     beforeEach(() => {
-        user = new UserController()
+        // const boardRepository: BoardRepository = {
+        //     getUserById: (email: string) => {
+        //         return {} as BoardModel
+        //     }, // 1. 인자값, 2. 리턴, 3.에러 발생시
+        // }
+        boardRepository = {
+            getUserById: jest.fn().mockResolvedValue("web7722"),
+        }
+        boardService = new BoardService(boardRepository)
     })
+    it("postWrite", async () => {
+        const dto: BoardWriteDTO = {
+            email: "asd",
+            subject: "asd",
+            content: "asd",
+            hashtag: "asd",
+            category: "asd",
+            images: "asd",
+            thumbnail: "asd",
+            tel1: "010",
+            tel2: "1234",
+            tel3: "5678",
+        }
+        const { username } = await boardService.postWrite(dto)
+        //boardRepository의 내용이 없기 때문에 아무 기능을 하지 못한다.
+        //코드는 작동이 되지만, 값이 나올 수 없음.
+        // expect("web7722").toBe(username)
 
-    it("Test 1-1", () => {
-        user.num = 10
-        expect(1).toEqual(user)
-    })
-    test("Test 1-2", () => {
-        const a = 1 + 1
-        expect(1).toEqual(user)
+        //getUserById가 호출이 되었는지 궁금하다.
+        expect(boardRepository.getUserById).toBeCalled()
+
+        // 어떤 인자값을 가지고 호출을 하는지
+        expect(boardRepository.getUserById).toBeCalledWith(`${dto.tel1}-${dto.tel2}-${dto.tel3}`)
     })
 })
