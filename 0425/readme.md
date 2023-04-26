@@ -218,6 +218,8 @@ merkleRoot()함수를 만들고 인자 값으로 Genesis 블록의 data 값을 �
 crypto.module.ts로 이동하여 merkleRoot()를 만들고 완성하여 준다.
 
 ```ts
+//crypto.module.ts
+
 import { Hash } from "types/block"
 import cryptojs from "crypto-js"
 import { TransactionData, TransactionRow } from "@core/transaction/transaction.interface"
@@ -273,7 +275,7 @@ const GENESIS: IBlock = {
 먼저 createblockHash라는 테스트를 작성한다.
 
 ```ts
-//test.ts
+//crypto.test.ts
 
 import { GENESIS } from "@constasnts/block.constants"
 import { BlockInfo } from "@core/block/block.interface"
@@ -369,7 +371,7 @@ const GENESIS: IBlock = {
 ### 3-4. 구한 Hash 값 검증하기
 
 Hash 값을 검증하는 함수를 만든다.
-이 함수는 hash의 값을 정규식을 이용해서 편변하고, false인 경우 'throw new Error'를 이용해서 에러를 발생하는 함수이다.
+이 함수는 hash의 값을 정규식을 이용해서 판단하고, false인 경우 'throw new Error'를 이용해서 에러를 발생하는 함수이다.
 
 먼저 테스트 코드부터 작성을 한다.
 
