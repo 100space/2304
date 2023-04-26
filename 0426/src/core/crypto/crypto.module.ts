@@ -65,35 +65,3 @@ class CryptoModule {
     }
 }
 export default CryptoModule
-
-// import { Hash } from "types/block"
-// import cryptojs from "crypto-js"
-// import { TransactionData, TransactionRow } from "@core/transaction/transaction.interface"
-// import merkle from "merkle"
-// import { BlockInfo } from "@core/block/block.interface"
-
-// class CryptoModule {
-//     SHA256(data: string): Hash {
-//         const hash = cryptojs.SHA256(data).toString()
-//         return hash
-//     }
-
-//     merkleRoot(data: TransactionData) {
-//         if (data instanceof TransactionRow) {
-//             //data:TransactionRow
-//         } else {
-//             //data:string
-//             return merkle("sha256").sync([data]).root()
-//         }
-//     }
-//     createBlockHash(data: BlockInfo): Hash {
-//         const value = Object.values(data).sort().join("")
-//         return this.SHA256(value)
-//     }
-//     isValidHash(hash: Hash): void {
-//         const hexRegExp = /^[0-9a-fA-F]{64}$/
-//         if (!hexRegExp.test(hash)) {
-//             throw new Error(`Hash 값이 올바르지 않습니다. hash: ${hash}`)
-//         }
-//     }
-// }
