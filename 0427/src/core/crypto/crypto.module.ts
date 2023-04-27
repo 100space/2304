@@ -2,10 +2,10 @@ import { Hash } from "types/block"
 import cryptojs from "crypto-js"
 import merkle from "merkle"
 import { TransactionData, TransactionRow } from "@core/transaction/transaction.interface"
-import { BlockData, BlockInfo } from "@core/block/block.interface"
+import { BlockData, BlockInfo, IBlock } from "@core/block/block.interface"
 
 class CryptoModule {
-    createBlockHash(data: BlockData): Hash {
+    createBlockHash(data: BlockData | IBlock): Hash {
         //data ->object ->sort->string->SHA256
         //정렬하는 방법 : keys를 이용해서
         // const value = Object.values(data).sort().join("")

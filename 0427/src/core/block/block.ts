@@ -11,7 +11,16 @@ class Block {
         const blockData = this.createBlockData(previousBlock, data) // block의 데이터 값 구하기
         // 작업증명을 위한 로직
         // POW를 알아볼 예정이다.
-        this.workProof.run()
+        // blockhash 를 만들때 조건이 POW의 조건이다.
+        // hex->binary 변환했을 때 앞에 0이 몇개 붙었는지?
+        // 기준은 블록생성시간 기준으로 빨리만들어졌으면 난이도를 올리고 늦게 만들어졌으면 난이도를 낮춰서 빠르게 생성되게 해야 한다.
+        // 블록 생성 기준은 10분 ( 비트코인이 10분)
+        // 몇 번째 블럭이랑 비교할 것인가?
+        // 10번 째 블록을 기준으로 잡는다.
+        // 1~10번째 블록은 난이도를 동일하게 하면서 11 번째 블록이랑 1번째 블록을 비교해서 난이도를 설정한다.
+        //adjustmentBlock은 10번째 전 블록으로 난이도를 결정하기 위해서 비교군으로 넣어준다ㅏ.
+        const newBlock = this.workProof.run(blockData, adjustmentBlock)
+        return newBlock
     }
 
     isVaildBlock(block: IBlock): void {

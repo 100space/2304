@@ -1,8 +1,8 @@
 import { IBlock } from "../block.interface"
-import { Proof } from "./workproof.interface"
+import { Proof, ProofOfStakeProps } from "./workproof.interface"
 
 class ProofOfStake implements Proof {
-    execute(): IBlock {
+    execute(props: ProofOfStakeProps): IBlock {
         //POS 로직구현
         console.log("POS 실행")
         return {} as IBlock
