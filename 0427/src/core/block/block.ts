@@ -11,6 +11,7 @@ class Block {
         const blockData = this.createBlockData(previousBlock, data) // block의 데이터 값 구하기
         // 작업증명을 위한 로직
         // POW를 알아볼 예정이다.
+        this.workProof.run()
     }
 
     isVaildBlock(block: IBlock): void {
