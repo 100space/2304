@@ -2,11 +2,16 @@ import { VERSION } from "@constasnts/block.constants"
 import CryptoModule from "@core/crypto/crypto.module"
 import { TransactionData, TransactionRow } from "@core/transaction/transaction.interface"
 import { BlockData, BlockInfo, IBlock } from "./block.interface"
+import WorkProof from "./workproof/workproof"
 
 class Block {
-    constructor(private readonly crypto: CryptoModule) {}
+    constructor(private readonly crypto: CryptoModule, private readonly workProof: WorkProof) {}
 
-    createBlock(previousBlock: IBlock, data: TransactionData) {}
+    createBlock(previousBlock: IBlock, data: TransactionData, adjustmentBlock: IBlock) {
+        const blockData = this.createBlockData(previousBlock, data) // block의 데이터 값 구하기
+        // 작업증명을 위한 로직
+        // POW를 알아볼 예정이다.
+    }
 
     isVaildBlock(block: IBlock): void {
         this.crypto.isValidHash(block.hash)
