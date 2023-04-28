@@ -31,8 +31,10 @@
     },
     "dependencies": {
         "@types/crypto-js": "^4.1.1",
+        "@types/elliptic": "^6.4.14",
         "@types/merkle": "^0.6.1",
         "crypto-js": "^4.1.1",
+        "elliptic": "^6.5.4",
         "merkle": "^0.6.0"
     }
 }
