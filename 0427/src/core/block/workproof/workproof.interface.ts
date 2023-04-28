@@ -6,10 +6,7 @@ export interface ProofOfWorkProps {
     blockData: BlockData
     adjustmentBlock: IBlock
 }
-export interface ProofOfStakeProps {
-    blockData: BlockData
-    adjustmentBlock: IBlock
-}
+export interface ProofOfStakeProps {}
 export interface DifficultyProps {
     height: Height
     currentTime: Timestamp

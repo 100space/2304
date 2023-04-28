@@ -29,7 +29,7 @@ let adjustmentBlock = GENESIS
 for (let i = 1; i < 100; i++) {
     previousBlock = blockArr[i - 1]
     if (i > 19) adjustmentBlock = blockArr[Math.floor(i / 10 - 1) * 10]
-    Nblock = block.createBlock(previousBlock, "123123", adjustmentBlock)
+    Nblock = block.createBlock(previousBlock, "123123124124", adjustmentBlock)
     blockArr.push(Nblock)
 }
-console.log(blockArr[0])
+console.log(blockArr)

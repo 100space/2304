@@ -28,7 +28,6 @@ class ProofOfWork implements Proof {
             block.timestamp = new Date().getTime()
             block.difficulty = this.getDifficulty(this.getDifficultyProps(block, adjustmentBlock))
             block.hash = this.crypto.createBlockHash(block)
-            console.log(block.difficulty)
         } while (!this.crypto.hashToBinary(block.hash).startsWith("0".repeat(block.difficulty)))
         return block as IBlock
     }
