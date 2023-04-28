@@ -9,7 +9,7 @@ export class Sender {
 export class Receipt {
     sender!: Sender
     received!: string
-    amount!: string
+    amount!: number
     //서명도 여러가지 데이터 타입이 있지만 elliptic에서 제공하는 타입을 이용한다.
     signature?: SignatureInput
 }

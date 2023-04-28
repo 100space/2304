@@ -23,7 +23,7 @@ class DigitalSignature {
     createAccount(publicKey: string) {
         //public은 32byte인데 알고리즘을 이용해서 작업하면 1byte가 추가 된다. 그래서 account 를 만들때 13byte를 잘라야한다.
         const buffer = Buffer.from(publicKey) // 앞을 자르기 위해서 버퍼를 사용하는 것이 좋다.
-        const account = buffer.slice(24).toString()
+        const account = buffer.slice(26).toString()
         return account
     }
 
