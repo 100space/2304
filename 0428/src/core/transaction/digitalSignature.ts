@@ -16,8 +16,7 @@ class DigitalSignature {
         //퍼블릭키를 만들기 위해서 프라이빗키를 받고 이를 이용해서 알고리즘이 있는 라이브러리를 사용하면 공개키를 만들 수 있다.
         const keyPair = this.ec.keyFromPrivate(privateKey)
         const publicKey = keyPair.getPublic().encode("hex", true) //32byte + 1byte
-
-        return publicKey // 32byte
+        return publicKey // 33byte
     }
 
     createAccount(publicKey: string) {
@@ -43,7 +42,6 @@ class DigitalSignature {
             sender: { publicKey },
             signature,
         } = receipt
-
         if (!publicKey || !signature) throw new Error("receipt 내용이 올바르지 않습니다.")
         const receiptHash = this.crypto.createReceiptHash(receipt)
 
