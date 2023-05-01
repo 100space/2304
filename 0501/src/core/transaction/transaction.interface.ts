@@ -30,7 +30,7 @@ export class TxOut {
 }
 
 export class TransactionRow {
-    txIns?: TxIn[]
+    txIns!: TxIn[]
     txOuts!: TxOut[]
     hash?: string
 }

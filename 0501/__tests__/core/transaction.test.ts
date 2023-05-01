@@ -1,10 +1,13 @@
+import CryptoModule from "@core/crypto/crypto.module"
 import Transaction from "@core/transaction/transaction"
 
 describe("Transaction", () => {
     let transaction: Transaction
+    let crypto: CryptoModule
 
     beforeEach(() => {
-        transaction = new Transaction()
+        crypto = new CryptoModule()
+        transaction = new Transaction(crypto)
     })
 
     describe("createTxOut", () => {
@@ -39,10 +42,10 @@ describe("Transaction", () => {
             const account = "0".repeat(40)
             const amount = 50
             const txout = transaction.createTxOut(account, amount)
-            const row = transaction.createRow([txin], [txout])
+            const row = transaction.createRow([txin, txin, txin], [txout])
             console.log(row)
 
-            expect(row.txIns).toStrictEqual([txin]) // tostring으로 변환후 검사한다.
+            expect(row.txIns).toStrictEqual([txin, txin, txin]) // tostring으로 변환후 검사한다.
             expect(row.txOuts).toStrictEqual([txout])
         })
         it("매개변수 내용이 올바르지 않을 때 ", () => {
