@@ -19,6 +19,6 @@
             "@constasnts/*": ["constasnts/*"]
         }
     },
-    "include": ["./src/**/*", "__tests__"],
+    "include": ["./src/**/*", "__tests__", "test.js"],
     "exclued": ["node_modules"]
 }
