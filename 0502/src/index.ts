@@ -8,6 +8,7 @@ import CryptoModule from "@core/crypto/crypto.module"
 import DigitalSignature from "@core/transaction/digitalSignature"
 import Transaction from "@core/transaction/transaction"
 import { Receipt } from "@core/transaction/transaction.interface"
+import Unspent from "@core/transaction/unspentPool"
 
 console.log("hello bitcoin")
 
@@ -19,6 +20,7 @@ const digitalSignature = new DigitalSignature(crypto)
 const transaction = new Transaction(crypto)
 const workProof = new WorkProof(proofofwork)
 const block = new Block(crypto, workProof)
+const unspent = new Unspent()
 
 // const block1 = block.createBlock(GENESIS, "123123", GENESIS)
 // const block2 = block.createBlock(block1, "123123", GENESIS)
@@ -48,17 +50,9 @@ const account = digitalSignature.createAccount(publicKey)
 
 // TX
 const coinbase2 = transaction.createCoinbase(account, GENESIS.height)
+unspent.createUTXO(coinbase2)
 const block2 = block.createBlock(GENESIS, [coinbase2], GENESIS)
 console.log(block2)
-
-//////////////////////////////////////////////////////////////////
-// 영수증 -> transaction -> 블록생성
-
-//GENESIS
-//block2 : coinbase
-//block3 : coinbase, transaction 1건에 대한 블록
-
-//3번 블록에 Transaction 넣기
 
 //영수증
 const receipt: Receipt = {
@@ -72,6 +66,12 @@ const receipt: Receipt = {
 }
 
 // TX 만들기
+//보내는 사람의 잔고
+const myutxo = unspent.me(account)
+console.log(myutxo)
+const totalAmount = myutxo.reduce((acc, utxo) => {
+    return acc + utxo.amount
+}, 0)
 // TxIn
 const txin1 = transaction.createTxIn(1, "", receipt.signature)
 // TxOut
@@ -87,3 +87,5 @@ const tx2 = transaction.create(receipt)
 const coinbase3 = transaction.createCoinbase(account, block2.height)
 const block3 = block.createBlock(block2, [coinbase3, tx1, tx2], GENESIS)
 console.log(block3)
+
+//

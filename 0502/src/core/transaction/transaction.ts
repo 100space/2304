@@ -45,7 +45,6 @@ class Transaction {
     serializeTxIn(txIn: TxIn) {
         const { txOutIndex } = txIn
         const text = [txOutIndex].join("")
-        console.log(text, 11111)
         return this.crypto.SHA256(text)
     }
 
@@ -74,14 +73,14 @@ class Transaction {
         const txoutText = txOuts.reduce((acc: string, v: TxOut) => {
             return acc + this.serializeTxOut(v)
         }, "")
-        console.log(txoutText) // hash + hash
+        // console.log(txoutText) // hash + hash
 
         const txinText = txIns?.reduce((acc: string, v: TxIn) => {
             return acc + this.serializeTxIn(v)
         }, "")
 
-        console.log(txoutText, text1) // 같다.
-        console.log(txinText, text2) // 같다.
+        // console.log(txoutText, text1) // 같다.
+        // console.log(txinText, text2) // 같다.
 
         return this.crypto.SHA256(text1 + text2)
     }
