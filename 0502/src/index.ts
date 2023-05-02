@@ -7,6 +7,7 @@ import CryptoModule from "@core/crypto/crypto.module"
 
 import DigitalSignature from "@core/transaction/digitalSignature"
 import Transaction from "@core/transaction/transaction"
+import { Receipt } from "@core/transaction/transaction.interface"
 
 console.log("hello bitcoin")
 
@@ -46,30 +47,43 @@ const publicKey = digitalSignature.createPublicKey(privateKey)
 const account = digitalSignature.createAccount(publicKey)
 
 // TX
-const tx = transaction.createCoinbase(account, GENESIS.height)
-console.log(tx)
-const block2 = block.createBlock(GENESIS, [tx], GENESIS)
+const coinbase2 = transaction.createCoinbase(account, GENESIS.height)
+const block2 = block.createBlock(GENESIS, [coinbase2], GENESIS)
 console.log(block2)
 
 //////////////////////////////////////////////////////////////////
-// // 영수증 -> transaction -> 블록생성
+// 영수증 -> transaction -> 블록생성
 
-// //GENESIS
-// //block2 : coinbase
-// //block3 : coinbase, transaction 1건에 대한 블록
+//GENESIS
+//block2 : coinbase
+//block3 : coinbase, transaction 1건에 대한 블록
 
-// //영수증
-// const receipt = {
-//     sender: {
-//         account,
-//         publicKey,
-//     },
-//     received: "0".repeat(40), // 원래는 누군가의 account이지만 임의의 값으로 코드가 돌아갈 수 있게만 만듬
-//     amount: 30,
-// }
+//3번 블록에 Transaction 넣기
 
-// // TX
-// //txOutId : hash 값이라고 생각하면 된다.
-// const txin = transaction.createTxIn()
-// const txout = transaction.createTxOut()
-// transaction.createRow(txin, txout)
+//영수증
+const receipt: Receipt = {
+    sender: {
+        account,
+        publicKey,
+    },
+    received: "0".repeat(40), // 원래는 누군가의 account이지만 임의의 값으로 코드가 돌아갈 수 있게만 만듬
+    amount: 30,
+    signature: "0000",
+}
+
+// TX 만들기
+// TxIn
+const txin1 = transaction.createTxIn(1, "", receipt.signature)
+// TxOut
+// 총수량 - amount
+const txout_sender = transaction.createTxOut(receipt.sender.account, 50 - receipt.amount)
+const txout_received = transaction.createTxOut(receipt.received, receipt.amount)
+
+const tx1 = transaction.createRow([txin1], [txout_sender, txout_received])
+
+//함수로 잘 만들어서 receipt를 받은 내용을 처리할 수있는 함수를 만든다.
+const tx2 = transaction.create(receipt)
+
+const coinbase3 = transaction.createCoinbase(account, block2.height)
+const block3 = block.createBlock(block2, [coinbase3, tx1, tx2], GENESIS)
+console.log(block3)

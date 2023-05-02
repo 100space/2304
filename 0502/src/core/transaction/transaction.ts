@@ -1,12 +1,23 @@
 import { IBlock } from "@core/block/block.interface"
 import CryptoModule from "@core/crypto/crypto.module"
 import { SignatureInput } from "elliptic"
-import { TransactionRow, TxIn, TxOut } from "./transaction.interface"
+import { Receipt, TransactionRow, TxIn, TxOut } from "./transaction.interface"
 
 class Transaction {
     //마이닝을 하면 보상하는 (코인베이스)코드를 작성해야함
     private readonly REWARD = 50
     constructor(private readonly crypto: CryptoModule) {}
+
+    create(receipt: Receipt) {
+        const totalAmount = 50
+        // TxIn
+        const txin1 = this.createTxIn(1, "", receipt.signature)
+        // TxOut
+        // 총수량 - amount
+        const txout_sender = this.createTxOut(receipt.sender.account, 50 - receipt.amount)
+        const txout_received = this.createTxOut(receipt.received, receipt.amount)
+        return this.createRow([txin1], [txout_sender, txout_received])
+    }
     createTxOut(account: string, amount: number) {
         if (account.length !== 40) throw new Error("Account 형식이 올바르지 않다.")
         const txout = new TxOut()
