@@ -72,6 +72,10 @@ console.log(myutxo)
 const totalAmount = myutxo.reduce((acc, utxo) => {
     return acc + utxo.amount
 }, 0)
+
+//잔고가 영수증의 내용보다 크니(보낼양 보다 많이 가지고있니?)
+if (totalAmount < receipt.amount) new Error("잔액부족")
+
 // TxIn
 const txin1 = transaction.createTxIn(1, "", receipt.signature)
 // TxOut
