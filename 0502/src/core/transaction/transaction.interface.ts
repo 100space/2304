@@ -35,4 +35,14 @@ export class TransactionRow {
     hash?: string
 }
 
+export class UnspentTxOut {
+    txOutId!: string
+    txOutIndex!: number
+    account!: string
+    amount!: number
+}
+
 export type TransactionData = string | TransactionRow[]
+
+export type UnspentTxOutPool = UnspentTxOut[]
+export type TransactionPool = TransactionRow[]
