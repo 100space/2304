@@ -34,6 +34,7 @@ class Transaction {
     serializeTxIn(txIn: TxIn) {
         const { txOutIndex } = txIn
         const text = [txOutIndex].join("")
+        console.log(text, 11111)
         return this.crypto.SHA256(text)
     }
 

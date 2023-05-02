@@ -40,11 +40,10 @@ for (let i = 1; i < 100; i++) {
 // console.log(blockArr)
 
 //코인베이스
+// const privateKey = digitalSignature.createPrivateKey()
 const privateKey = "7252c2df08138d6baa44532ecccef306595c4e0fce99d37fd7a2f4df2cfe048b"
 const publicKey = digitalSignature.createPublicKey(privateKey)
 const account = digitalSignature.createAccount(publicKey)
-
-// console.log(account)
 
 // TX
 const tx = transaction.createCoinbase(account, GENESIS.height)
