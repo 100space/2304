@@ -1,5 +1,5 @@
 import Transaction from "./transaction"
-import { Receipt, Sender, TransactionRow, TxIn, TxOut, UnspentTxOut, UnspentTxOutPool } from "./transaction.interface"
+import { Receipt, TransactionRow, TxIn, TxOut, UnspentTxOut, UnspentTxOutPool } from "./transaction.interface"
 
 class Unspent {
     private readonly unspentTxOuts: UnspentTxOutPool = []
