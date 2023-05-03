@@ -2,6 +2,7 @@ import DigitalSignature from "./digitalSignature"
 import { Accounts, Receipt } from "./wallet.interface"
 
 class wallet {
+    //한명의 사용자가 여러개의 계정을 가질 수 있기 때문에 배열로 관리한다.
     private readonly accounts: Accounts[] = []
     constructor(private readonly digitalSignature: DigitalSignature) {}
 

@@ -25,8 +25,6 @@ const unspent = new Unspent(transaction)
 const accounts = new wallet(digitalSignature)
 
 const sender = accounts.create()
-console.log(sender)
 
 //받는사람은 40글자의 account이기 때문에 예외처리가 필요하다.
-const receipt = accounts.receipt("0000", 30) // 받는 사람과 받는 양을 입력해주면 영수증이 나온다.
-console.log(receipt)
+const receipt = accounts.receipt("0".repeat(40), 30) // 받는 사람과 받는 양을 입력해주면 영수증이 나온다.
