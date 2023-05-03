@@ -1,7 +1,6 @@
 import { Receipt } from "@core/wallet/wallet.interface"
 import { SignatureInput } from "elliptic"
-import Transaction from "./transaction"
-import { TransactionRow, TxIn, TxOut, UnspentTxOut, UnspentTxOutPool } from "./transaction.interface"
+import { TransactionData, TransactionRow, TxIn, TxOut, UnspentTxOut, UnspentTxOutPool } from "./transaction.interface"
 
 class Unspent {
     private readonly unspentTxOuts: UnspentTxOutPool = []
@@ -12,10 +11,36 @@ class Unspent {
         return this.unspentTxOuts
     }
     delete(txin: TxIn) {
-        const index = this.unspentTxOuts.findIndex((utxo) => {
-            return utxo.txOutId === txin.txOutId && utxo.txOutIndex === txin.txOutIndex
+        const { txOutId, txOutIndex } = txin
+        const index = this.unspentTxOuts.findIndex((utxo: UnspentTxOut) => {
+            return utxo.txOutId === txOutId && utxo.txOutIndex === txOutIndex
         })
-        this.unspentTxOuts.splice(index)
+        if (index !== -1) this.unspentTxOuts.splice(index, 1)
+    }
+
+    create(hash: string) {
+        return (txout: TxOut, txOutIndex: number) => {
+            const { amount, account } = txout
+            this.unspentTxOuts.push({
+                txOutId: hash,
+                txOutIndex,
+                account,
+                amount,
+            })
+        }
+    }
+
+    //트랜잭션
+    sync(transactions: TransactionData) {
+        if (typeof transactions === "string") return
+        transactions.forEach(this.update.bind(this))
+    }
+
+    update(transaction: TransactionRow): void {
+        const { txIns, txOuts, hash } = transaction
+        if (!hash) throw new Error("hash값이 없습니다.")
+        txOuts.forEach(this.create(hash))
+        txIns.forEach(this.delete.bind(this))
     }
 
     createUTXO(transaction: TransactionRow): void {
@@ -87,22 +112,17 @@ class Unspent {
 
         return txins
     }
-    getOutput(receipt: Receipt) {
-        const {
-            sender: { account },
-            received,
-            amount,
-        } = receipt
-        const txOuts = []
-        const totalAmount = this.getAmount(this.me(account))
-        const received_txout = this.transaction.createTxOut(received, amount)
-        txOuts.push(received_txout)
 
-        if (totalAmount - amount > 0) {
-            const sender_txOut = this.transaction.createTxOut(account, totalAmount - amount)
-            txOuts.push(sender_txOut)
+    //내가 가지고 있는 자산에서
+    //보낼 금액을 뺐을 때 0 이상일 경우 잔돈을 준다.
+    // 보내는 사람주고, 보낼금액, 나의주소, 나의금액
+    getOutput(received: string, amount: number, sender: string, balance: number) {
+        const txouts: TxOut[] = []
+        txouts.push({ account: received, amount })
+        if (balance > 0) {
+            txouts.push({ account: sender, amount: balance - amount })
         }
-        return txOuts
+        return txouts
     }
 }
 export default Unspent

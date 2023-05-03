@@ -23,7 +23,8 @@ class Ingchain {
         const newBlock = this.block.createBlock(latestBlock, [coinbase], adjustmentBlock)
         this.chain.addToChain(newBlock) // [GENESIS, block#2]
         console.info(`블럭이 생성되었습니다.`)
-
+        this.unspent.sync(newBlock.data)
+        console.log(this.unspent.getUnspentTxPool())
         return this.chain.latestBlock()
     }
     sendTransaction() {}

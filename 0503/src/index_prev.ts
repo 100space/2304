@@ -21,7 +21,7 @@ const digitalSignature = new DigitalSignature(crypto)
 const transaction = new Transaction(crypto)
 const workProof = new WorkProof(proofofwork)
 const block = new Block(crypto, workProof)
-const unspent = new Unspent(transaction)
+const unspent = new Unspent()
 const accounts = new wallet(digitalSignature)
 
 const sender = accounts.create()
