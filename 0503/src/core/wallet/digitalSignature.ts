@@ -1,7 +1,7 @@
 import CryptoModule from "@core/crypto/crypto.module"
 import { randomBytes } from "crypto"
 import elliptic, { SignatureInput } from "elliptic"
-import { Receipt } from "./transaction.interface"
+import { Receipt } from "./wallet.interface"
 
 class DigitalSignature {
     private readonly ec = new elliptic.ec("secp256k1")
