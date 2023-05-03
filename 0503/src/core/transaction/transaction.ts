@@ -87,7 +87,7 @@ class Transaction {
     }
 
     // 앞으로 생성되는 블록 전에 실행될 메서드이다.
-    createCoinbase(account: string, lastestBlockHeight: number) {
+    createCoinbase(account: string, lastestBlockHeight: number): TransactionRow {
         const txin = this.createTxIn(lastestBlockHeight + 1)
         const txout = this.createTxOut(account, this.REWARD)
         return this.createRow([txin], [txout])

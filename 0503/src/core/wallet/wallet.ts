@@ -23,7 +23,7 @@ class wallet {
 
     //wallet을 사용할 때, puplicKey와, account를 가져오고 싶을 때 사용한다.
     // create와 비슷한 코드
-    public set(privateKey: string) {
+    public set(privateKey: string): Accounts {
         const publicKey = this.digitalSignature.createPublicKey(privateKey)
         const account = this.digitalSignature.createAccount(publicKey)
 
@@ -44,7 +44,7 @@ class wallet {
 
     //account 내용을 가지고 개인키 구하기
     private getPrivate(account: string): string {
-        return this.accounts.filter((v) => v.account === account)[0].account
+        return this.accounts.filter((v) => v.account === account)[0].privateKey
     }
 
     //receipt함수를 호출하는 상황에서는 이미 accounts에 정보가 있을 확률이 높다.

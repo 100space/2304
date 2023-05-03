@@ -24,14 +24,14 @@ class Ingchain {
         this.chain.addToChain(newBlock) // [GENESIS, block#2]
         console.info(`블럭이 생성되었습니다.`)
         this.unspent.sync(newBlock.data)
-        console.log(this.unspent.getUnspentTxPool())
+
         return this.chain.latestBlock()
     }
-    sendTransaction() {}
     getBalance(account: string) {
         const myUnpentTxOuts = this.unspent.me(account)
         const balance = this.unspent.getAmount(myUnpentTxOuts)
         return balance
     }
+    sendTransaction() {}
 }
 export default Ingchain

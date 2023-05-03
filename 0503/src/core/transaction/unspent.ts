@@ -43,36 +43,6 @@ class Unspent {
         txIns.forEach(this.delete.bind(this))
     }
 
-    createUTXO(transaction: TransactionRow): void {
-        const { txOuts, hash } = transaction
-        if (!hash) throw new Error("hash값이 없습니다.")
-        //transaction.txin 삭제하는 코드
-        transaction.txIns.forEach((v) => this.delete(v))
-
-        // txOuts를 이용해서 미사용 객체를 만드는데
-        // txOuts의 갯수가 가변적이다.
-
-        // transaction.txout 생성하는코드
-        const newUnspentTxOut = txOuts.map((txout: TxOut, index: number) => {
-            const unspentTxOut = new UnspentTxOut()
-            unspentTxOut.txOutId = hash
-            unspentTxOut.txOutIndex = index
-            unspentTxOut.account = txout.account
-            unspentTxOut.amount = txout.amount
-            return unspentTxOut
-        })
-
-        this.unspentTxOuts.push(...newUnspentTxOut)
-
-        // const index = 0
-        // const utxo = new UnspentTxOut()
-        // utxo.txOutId = hash
-        // utxo.txOutIndex = index
-        // utxo.account = txOuts[index].account
-        // utxo.amount = txOuts[index].amount
-        // return utxo
-    }
-
     //내 UTXO만 뽑아오는 메서드
     me(account: string): UnspentTxOut[] {
         // const utxo = this.UnspentTxOuts
@@ -120,7 +90,7 @@ class Unspent {
         const txouts: TxOut[] = []
         txouts.push({ account: received, amount })
         if (balance > 0) {
-            txouts.push({ account: sender, amount: balance - amount })
+            txouts.push({ account: sender, amount: balance })
         }
         return txouts
     }
