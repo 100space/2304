@@ -1,30 +1,35 @@
-import { GENESIS } from "@constasnts/block.constants"
 import Block from "@core/block/block"
-import { IBlock } from "@core/block/block.interface"
 import ProofOfWork from "@core/block/workproof/proofofwork"
 import WorkProof from "@core/block/workproof/workproof"
+import Chain from "@core/chain/chain"
 import CryptoModule from "@core/crypto/crypto.module"
-
-import DigitalSignature from "@core/wallet/digitalSignature"
+import Ingchain from "@core/ingchain"
 import Transaction from "@core/transaction/transaction"
 import Unspent from "@core/transaction/unspent"
-import { Receipt } from "@core/wallet/wallet.interface"
+import DigitalSignature from "@core/wallet/digitalSignature"
 import wallet from "@core/wallet/wallet"
 
-console.log("hello bitcoin")
-
-//블럭을 100~1000개 만들기
+const chain = new Chain()
 
 const crypto = new CryptoModule()
-const proofofwork = new ProofOfWork(crypto)
-const digitalSignature = new DigitalSignature(crypto)
-const transaction = new Transaction(crypto)
-const workProof = new WorkProof(proofofwork)
+const proof = new ProofOfWork(crypto)
+
+const workProof = new WorkProof(proof)
 const block = new Block(crypto, workProof)
-const unspent = new Unspent(transaction)
+
+const transaction = new Transaction(crypto)
+const unspent = new Unspent()
+const baekspace = new Ingchain(chain, block, transaction, unspent)
+
+const digitalSignature = new DigitalSignature(crypto)
 const accounts = new wallet(digitalSignature)
 
 const sender = accounts.create()
 
-//받는사람은 40글자의 account이기 때문에 예외처리가 필요하다.
-const receipt = accounts.receipt("0".repeat(40), 30) // 받는 사람과 받는 양을 입력해주면 영수증이 나온다.
+const block01 = baekspace.mineBlock(sender.account)
+baekspace.mineBlock(sender.account)
+baekspace.mineBlock(sender.account)
+console.log(block)
+
+const balance = baekspace.getBalance(sender.account)
+console.log(balance)

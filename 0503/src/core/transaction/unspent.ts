@@ -1,10 +1,11 @@
 import { Receipt } from "@core/wallet/wallet.interface"
+import { SignatureInput } from "elliptic"
 import Transaction from "./transaction"
 import { TransactionRow, TxIn, TxOut, UnspentTxOut, UnspentTxOutPool } from "./transaction.interface"
 
 class Unspent {
     private readonly unspentTxOuts: UnspentTxOutPool = []
-    constructor(private readonly transaction: Transaction) {}
+    constructor() {}
 
     //getter
     getUnspentTxPool() {
@@ -73,34 +74,26 @@ class Unspent {
     }
 
     //영수증의 정보를 가지고 미사용트랜잭션을 구해올 수 있다.
-    getInput(receipt: Receipt) {
-        const {
-            sender: { account },
-            amount,
-        } = receipt
-        const myUnspentTxOuts = this.me(account)
+    getInput(myUnspentTxOuts: UnspentTxOut[], receiptAmount: number, signature: SignatureInput) {
+        let targetAmount = 0 //
 
-        //나의 관련 미사용 객체를  `receipt.amount` 보다 클 때 까지 뽑아와야 한다.
-        let targetAmount = 0
-        let txins = []
-        for (const unspentTxOut of myUnspentTxOuts) {
-            targetAmount += unspentTxOut.amount
-            const txin = this.transaction.createTxIn(unspentTxOut.txOutIndex, unspentTxOut.txOutId, receipt.signature)
-            txins.push(txin)
-            if (targetAmount >= amount) break
-        }
+        const txins = myUnspentTxOuts.reduce((acc: TxIn[], unspentTxOut: UnspentTxOut) => {
+            const { amount, txOutId, txOutIndex } = unspentTxOut
+            if (targetAmount >= receiptAmount) return acc
+            targetAmount += amount
+            acc.push({ txOutIndex, txOutId, signature })
+            return acc
+        }, [] as TxIn[])
+
         return txins
     }
     getOutput(receipt: Receipt) {
-        //output은 1~2개의 객체로 이루어져있다.
-
         const {
             sender: { account },
             received,
             amount,
         } = receipt
         const txOuts = []
-        //받는 사람에 대한 txout
         const totalAmount = this.getAmount(this.me(account))
         const received_txout = this.transaction.createTxOut(received, amount)
         txOuts.push(received_txout)
