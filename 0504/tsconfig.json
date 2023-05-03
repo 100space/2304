@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "module": "commonJS",
+        "outDir": "dist",
+        "target": "ES6",
+        "esModuleInterop": true, // import React form 'react'
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "strict": true,
+        "typeRoots": ["node_modules/@types", "src/@types"],
+        "types": ["jest"],
+        "baseUrl": "./src",
+        "lib": ["ES2017"],
+        "paths": {
+            "@board/*": ["board/*"],
+            "@comment/*": ["comment/*"],
+            "@types/*": ["types/*"],
+            "@core/*": ["core/*"],
+            "@constasnts/*": ["constasnts/*"]
+        }
+    },
+    "include": ["./src/**/*", "__tests__", "test.js"],
+    "exclued": ["node_modules"]
+}
