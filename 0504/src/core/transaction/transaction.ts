@@ -2,22 +2,19 @@ import { IBlock } from "@core/block/block.interface"
 import CryptoModule from "@core/crypto/crypto.module"
 import { Receipt } from "@core/wallet/wallet.interface"
 import { SignatureInput } from "elliptic"
-import { TransactionRow, TxIn, TxOut } from "./transaction.interface"
+import { TransactionRow, TxIn, TxOut, UnspentTxOut } from "./transaction.interface"
 
 class Transaction {
     //마이닝을 하면 보상하는 (코인베이스)코드를 작성해야함
     private readonly REWARD = 50
     constructor(private readonly crypto: CryptoModule) {}
 
-    create(receipt: Receipt) {
-        const totalAmount = 50
-        // TxIn
-        const txin1 = this.createTxIn(1, "", receipt.signature)
-        // TxOut
-        // 총수량 - amount
-        const txout_sender = this.createTxOut(receipt.sender.account, 50 - receipt.amount)
-        const txout_received = this.createTxOut(receipt.received, receipt.amount)
-        return this.createRow([txin1], [txout_sender, txout_received])
+    create(receipt: Receipt, myUnspentTxOuts: UnspentTxOut[]) {
+        //receipt를 가지고 txins, txouts 를 구현해야 한다.
+        // 1. txins : 사용할 UTXO
+        if (!receipt.signature) throw new Error("서명이 존재하지 않습니다.")
+        this.createInput(myUnspentTxOuts, receipt.amount, receipt.signature)
+        // 2. txouts
     }
     createTxOut(account: string, amount: number) {
         if (account.length !== 40) throw new Error("Account 형식이 올바르지 않다.")
@@ -25,6 +22,20 @@ class Transaction {
         txout.account = account
         txout.amount = amount
         return txout
+    }
+
+    createInput(myUnspentTxOuts: UnspentTxOut[], receiptAmount: number, signature: SignatureInput) {
+        let targetAmount = 0 //
+
+        const txins = myUnspentTxOuts.reduce((acc: TxIn[], unspentTxOut: UnspentTxOut) => {
+            const { amount, txOutId, txOutIndex } = unspentTxOut
+            if (targetAmount >= receiptAmount) return acc
+            targetAmount += amount
+            acc.push({ txOutIndex, txOutId, signature })
+            return acc
+        }, [] as TxIn[])
+
+        return txins
     }
 
     serializeTxOut(txOut: TxOut): string {

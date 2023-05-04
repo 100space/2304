@@ -68,20 +68,6 @@ class Unspent {
         return false
     }
 
-    getInput(myUnspentTxOuts: UnspentTxOut[], receiptAmount: number, signature: SignatureInput) {
-        let targetAmount = 0 //
-
-        const txins = myUnspentTxOuts.reduce((acc: TxIn[], unspentTxOut: UnspentTxOut) => {
-            const { amount, txOutId, txOutIndex } = unspentTxOut
-            if (targetAmount >= receiptAmount) return acc
-            targetAmount += amount
-            acc.push({ txOutIndex, txOutId, signature })
-            return acc
-        }, [] as TxIn[])
-
-        return txins
-    }
-
     getOutput(received: string, amount: number, sender: string, balance: number) {
         const txouts: TxOut[] = []
         txouts.push({ account: received, amount })

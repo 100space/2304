@@ -9,7 +9,7 @@ import DigitalSignature from "@core/wallet/digitalSignature"
 import Transaction from "@core/transaction/transaction"
 import Unspent from "@core/transaction/unspent"
 import { Receipt } from "@core/wallet/wallet.interface"
-import wallet from "@core/wallet/wallet"
+import Wallet from "@core/wallet/wallet"
 
 console.log("hello bitcoin")
 
@@ -22,7 +22,7 @@ const transaction = new Transaction(crypto)
 const workProof = new WorkProof(proofofwork)
 const block = new Block(crypto, workProof)
 const unspent = new Unspent()
-const accounts = new wallet(digitalSignature)
+const accounts = new Wallet(digitalSignature)
 
 const sender = accounts.create()
 

@@ -1,7 +1,7 @@
 import DigitalSignature from "./digitalSignature"
 import { Accounts, Receipt } from "./wallet.interface"
 
-class wallet {
+class Wallet {
     private readonly accounts: Accounts[] = []
     constructor(private readonly digitalSignature: DigitalSignature) {}
 
@@ -58,7 +58,9 @@ class wallet {
     }
 
     public sign() {}
-    public verify() {}
+    public verify(receipt: Receipt): boolean {
+        return this.digitalSignature.verify(receipt)
+    }
 }
 
-export default wallet
+export default Wallet
