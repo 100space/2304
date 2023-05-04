@@ -68,7 +68,6 @@ class Unspent {
         return false
     }
 
-    //영수증의 정보를 가지고 미사용트랜잭션을 구해올 수 있다.
     getInput(myUnspentTxOuts: UnspentTxOut[], receiptAmount: number, signature: SignatureInput) {
         let targetAmount = 0 //
 
@@ -83,9 +82,6 @@ class Unspent {
         return txins
     }
 
-    //내가 가지고 있는 자산에서
-    //보낼 금액을 뺐을 때 0 이상일 경우 잔돈을 준다.
-    // 보내는 사람주고, 보낼금액, 나의주소, 나의금액
     getOutput(received: string, amount: number, sender: string, balance: number) {
         const txouts: TxOut[] = []
         txouts.push({ account: received, amount })
