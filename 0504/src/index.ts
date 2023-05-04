@@ -35,6 +35,7 @@ baekspace.mineBlock(sender.account)
 baekspace.mineBlock(received.account)
 
 baekspace.sendTransaction(receipt)
+baekspace.mineBlock(sender.account)
 
 //Transaction 을 만든 다음에 pool에 저장한다.
 //baekspace.sendTransaction()로 트랜잭션을 보내면 트랜잭션 풀에 내용이 담기게 하는 것이 목표

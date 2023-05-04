@@ -18,11 +18,13 @@ class Ingchain {
         const latestBlock = this.chain.latestBlock()
         const adjustmentBlock = this.chain.getAdjustmentBlock()
 
+        const transaction = this.transaction.getPool()
         const coinbase = this.transaction.createCoinbase(account, latestBlock.height)
-        const newBlock = this.block.createBlock(latestBlock, [coinbase], adjustmentBlock)
+        const newBlock = this.block.createBlock(latestBlock, [coinbase, ...transaction], adjustmentBlock)
         this.chain.addToChain(newBlock) // [GENESIS, block#2]
         console.info(`블럭이 생성되었습니다.`)
         this.unspent.sync(newBlock.data)
+        this.transaction.sync(newBlock.data)
 
         return this.chain.latestBlock()
     }
@@ -42,7 +44,8 @@ class Ingchain {
         if (balance < receipt.amount) throw new Error("잔액이 부족합니다.")
         const tx = this.transaction.create(receipt, myUnspentTxOuts)
 
-        this.unspent.update(tx)
+        // this.unspent.update(tx)
+        // this.transaction.update(tx)
     }
 }
 export default Ingchain

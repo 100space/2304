@@ -2,7 +2,7 @@ import { IBlock } from "@core/block/block.interface"
 import CryptoModule from "@core/crypto/crypto.module"
 import { Receipt } from "@core/wallet/wallet.interface"
 import { SignatureInput } from "elliptic"
-import { TransactionPool, TransactionRow, TxIn, TxOut, UnspentTxOut } from "./transaction.interface"
+import { TransactionData, TransactionPool, TransactionRow, TxIn, TxOut, UnspentTxOut } from "./transaction.interface"
 
 class Transaction {
     //마이닝을 하면 보상하는 (코인베이스)코드를 작성해야함
@@ -125,7 +125,25 @@ class Transaction {
         const txin = this.createTxIn(lastestBlockHeight + 1)
         const txout = this.createTxOut(account, this.REWARD)
         return this.createRow([txin], [txout])
-        //
+    }
+    getPool() {
+        return this.transactionPool
+    }
+
+    //사용한 트랜잭션은 소멸해야된다.
+    sync(transaction: TransactionData) {
+        if (typeof transaction === "string") return
+        transaction.forEach(this.update.bind(this))
+    }
+    update(transaction: TransactionRow) {
+        // 내블럭의 data속성 안에 있는 transaction hash 값이랑
+        // transactionPool에 있는 hash 값이 같으면 삭제
+        const findCallback = (tx: TransactionRow) => {
+            return transaction.hash === tx.hash
+        }
+        const index = this.transactionPool.findIndex(findCallback)
+
+        if (index !== -1) this.transactionPool.splice(index, 1)
     }
 }
 
