@@ -2,20 +2,32 @@ import { IBlock } from "@core/block/block.interface"
 import CryptoModule from "@core/crypto/crypto.module"
 import { Receipt } from "@core/wallet/wallet.interface"
 import { SignatureInput } from "elliptic"
-import { TransactionRow, TxIn, TxOut, UnspentTxOut } from "./transaction.interface"
+import { TransactionPool, TransactionRow, TxIn, TxOut, UnspentTxOut } from "./transaction.interface"
 
 class Transaction {
     //마이닝을 하면 보상하는 (코인베이스)코드를 작성해야함
     private readonly REWARD = 50
+    private readonly transactionPool: TransactionPool = []
     constructor(private readonly crypto: CryptoModule) {}
 
     create(receipt: Receipt, myUnspentTxOuts: UnspentTxOut[]) {
-        //receipt를 가지고 txins, txouts 를 구현해야 한다.
         // 1. txins : 사용할 UTXO
         if (!receipt.signature) throw new Error("서명이 존재하지 않습니다.")
-        this.createInput(myUnspentTxOuts, receipt.amount, receipt.signature)
+        const [txIns, balance] = this.createInput(myUnspentTxOuts, receipt.amount, receipt.signature)
         // 2. txouts
+        const txOuts = this.createOutput(receipt.received, receipt.amount, receipt.sender.account, balance)
+        // 3. transaction 객체 생성
+        const transaction: TransactionRow = {
+            txIns,
+            txOuts,
+        }
+        transaction.hash = this.serializeRow(transaction)
+
+        // 4.트랜잭션 풀에 담기
+        this.transactionPool.push(transaction)
+        return transaction
     }
+
     createTxOut(account: string, amount: number) {
         if (account.length !== 40) throw new Error("Account 형식이 올바르지 않다.")
         const txout = new TxOut()
@@ -24,8 +36,8 @@ class Transaction {
         return txout
     }
 
-    createInput(myUnspentTxOuts: UnspentTxOut[], receiptAmount: number, signature: SignatureInput) {
-        let targetAmount = 0 //
+    createInput(myUnspentTxOuts: UnspentTxOut[], receiptAmount: number, signature: SignatureInput): [TxIn[], number] {
+        let targetAmount = 0 // 총 사용금액
 
         const txins = myUnspentTxOuts.reduce((acc: TxIn[], unspentTxOut: UnspentTxOut) => {
             const { amount, txOutId, txOutIndex } = unspentTxOut
@@ -35,7 +47,18 @@ class Transaction {
             return acc
         }, [] as TxIn[])
 
-        return txins
+        return [txins, targetAmount]
+    }
+    createOutput(received: string, amount: number, sender: string, balance: number) {
+        const txouts: TxOut[] = []
+        txouts.push({ account: received, amount })
+        if (balance - amount > 0) {
+            txouts.push({ account: sender, amount: balance - amount })
+        }
+        const outAmount = txouts.reduce((acc, txout: TxOut) => acc + txout.amount, 0)
+        if (balance !== outAmount) throw new Error("금액오류")
+
+        return txouts
     }
 
     serializeTxOut(txOut: TxOut): string {

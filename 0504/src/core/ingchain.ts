@@ -37,12 +37,12 @@ class Ingchain {
         if (!isVerify) throw new Error("올바르지 않은 영수증입니다.")
 
         //보내는 사람의 잔액을 확인한다.
-
         const myUnspentTxOuts = this.unspent.me(receipt.sender.account)
         const balance = this.unspent.getAmount(myUnspentTxOuts)
         if (balance < receipt.amount) throw new Error("잔액이 부족합니다.")
-        console.log(myUnspentTxOuts, 123123)
-        // this.transaction.create(receipt, this.unspent.getUnspentTxPool())
+        const tx = this.transaction.create(receipt, myUnspentTxOuts)
+
+        this.unspent.update(tx)
     }
 }
 export default Ingchain

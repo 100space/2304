@@ -67,14 +67,5 @@ class Unspent {
         if (totalAmount < sendAmount) return true
         return false
     }
-
-    getOutput(received: string, amount: number, sender: string, balance: number) {
-        const txouts: TxOut[] = []
-        txouts.push({ account: received, amount })
-        if (balance > 0) {
-            txouts.push({ account: sender, amount: balance })
-        }
-        return txouts
-    }
 }
 export default Unspent
