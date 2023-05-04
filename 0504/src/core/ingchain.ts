@@ -1,6 +1,7 @@
 import Block from "./block/block"
 import Chain from "./chain/chain"
 import Transaction from "./transaction/transaction"
+import { TransactionRow } from "./transaction/transaction.interface"
 import Unspent from "./transaction/unspent"
 import Wallet from "./wallet/wallet"
 import { Receipt } from "./wallet/wallet.interface"
