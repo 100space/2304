@@ -62,7 +62,9 @@ class Wallet {
         return receipt
     }
 
-    public sign() {}
+    public sign(receipt: Receipt, privateKey: string) {
+        return this.digitalSignature.sign(privateKey, receipt)
+    }
     public verify(receipt: Receipt): boolean {
         return this.digitalSignature.verify(receipt)
     }

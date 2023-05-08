@@ -38,17 +38,27 @@ export default (accounts: Wallet) => {
         })
         res.json({ ...account, balance })
     })
-    app.post("/transaction", (req, res) => {
-        const { sender, receipt, amount } = req.body
-        const {publicKey} = accounts.get(sender)
-        const receipt = {
-            sender: {
-                account: sender,
-                publicKey
-            }
-            received,
-            amount
-
+    app.post("/transaction", async (req, res) => {
+        try {
+            const { sender, received, amount } = req.body
+            const { publicKey, privateKey } = accounts.get(sender)
+            const receipt = accounts.sign(
+                {
+                    sender: {
+                        account: sender,
+                        publicKey,
+                    },
+                    received,
+                    amount,
+                },
+                privateKey
+            )
+            const tx = await axios.post("http://127.0.0.1:8545/transaction", { receipt })
+            console.log(tx)
+            res.json(tx)
+        } catch (e) {
+            if (e instanceof Error) res.status(500).send(e.message)
+            res.status(500).end()
         }
     })
     return app

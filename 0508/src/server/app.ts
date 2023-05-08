@@ -21,7 +21,6 @@ export default (blockchain: Ingchain) => {
     //계정 생성
     app.put("/accounts", (req, res) => {
         const account = blockchain.accounts.create()
-        console.log(account)
         res.json({ ...account })
     })
 
@@ -39,6 +38,8 @@ export default (blockchain: Ingchain) => {
 
     app.post("/transaction", (req, res) => {
         const { receipt } = req.body
+        console.log(receipt.amount)
+        receipt.amount = parseInt(receipt.amount)
         const transaction = blockchain.sendTransaction(receipt)
         res.json({
             transaction,
