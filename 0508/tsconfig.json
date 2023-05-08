@@ -12,6 +12,7 @@
         "baseUrl": "./src",
         "lib": ["ES2017"],
         "paths": {
+            "@wallet_front/*": ["wallet_front/*"],
             "@board/*": ["board/*"],
             "@comment/*": ["comment/*"],
             "@types/*": ["types/*"],
