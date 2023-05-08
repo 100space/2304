@@ -1,0 +1,47 @@
+// {
+//     "compilerOptions": {
+//         "module": "commonJS",
+//         "outDir": "dist",
+//         "target": "ES6",
+//         "esModuleInterop": true, // import React form 'react'
+//         "moduleResolution": "node",
+//         "resolveJsonModule": true,
+//         "strict": true,
+//         "typeRoots": ["node_modules/@types", "src/types"],
+//         "types": ["jest"],
+//         "baseUrl": "./src",
+//         "lib": ["ES2017", "dom"],
+//         "paths": {
+//             "@board/*": ["board/*"],
+//             "@comment/*": ["comment/*"],
+//             "@types/*": ["types/*"],
+//             "@core/*": ["core/*"],
+//             "@constasnts/*": ["constasnts/*"]
+//         }
+//     },
+//     "exclued": ["node_modules"]
+// }
+{
+    "compilerOptions": {
+        "module": "CommonJS",
+        "outDir": "./dist",
+        "target": "ES6",
+        "esModuleInterop": true,
+        "declaration": true,
+        "noImplicitAny": true,
+        "skipLibCheck": true,
+        "sourceMap": true,
+        "strict": true,
+        "baseUrl": "./src",
+        "paths": {
+            "@board/*": ["board/*"],
+            "@comment/*": ["comment/*"],
+            "@types/*": ["types/*"],
+            "@core/*": ["core/*"],
+            "@constasnts/*": ["constasnts/*"]
+        }
+    },
+    // "include": ["src/**/*"],
+    "include": ["./src/**/*", "__tests__", "test.js"],
+    "exclude": ["node_modules", "dist"]
+}

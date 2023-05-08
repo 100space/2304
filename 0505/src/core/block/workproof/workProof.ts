@@ -1,14 +1,13 @@
 import { BlockData, IBlock } from "../block.interface"
-import { Proof, ProofProps } from "./workproof.interface"
+import { Proof, ProofParams } from "./workproof.interface"
 
 class WorkProof {
     constructor(private readonly proof: Proof) {}
     run(blockData: BlockData, adjustmentBlock: IBlock): IBlock {
-        console.log(blockData, adjustmentBlock, 11111)
-        const props: ProofProps = {
+        const props = {
             blockData,
             adjustmentBlock,
-        } as ProofProps
+        } as ProofParams
         return this.proof.execute(props)
     }
 }

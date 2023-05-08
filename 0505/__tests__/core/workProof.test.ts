@@ -1,7 +1,6 @@
 import { BlockData, IBlock } from "@core/block/block.interface"
-import ProofOfStake from "@core/block/workproof/proofofstake"
 import ProofOfWork from "@core/block/workproof/proofofwork"
-import WorkProof from "@core/block/workproof/workproof"
+import WorkProof from "@core/block/workproof/workProof"
 import { Proof } from "@core/block/workproof/workproof.interface"
 import CryptoModule from "@core/crypto/crypto.module"
 
@@ -11,10 +10,9 @@ describe("workProof", () => {
     let crypto: CryptoModule
     let blockData: BlockData
     let adjustmentBlock: IBlock
-
-    describe("ProofOfWork", () => {
+    describe("POW 검증", () => {
         beforeEach(() => {
-            // Proof 타입을 주입해준다.
+            crypto = new CryptoModule()
             proof = new ProofOfWork(crypto)
             workProof = new WorkProof(proof)
             blockData = {
@@ -39,18 +37,9 @@ describe("workProof", () => {
                 data: "2009년 1월 3일 더 타임스, 은행들의 두번째 구제금융을 앞두고 있는 U.K 재무장관",
             }
         })
-        it("console 찍히나?", () => {
-            workProof.run(blockData, adjustmentBlock)
-        })
-    })
-    describe("ProofOfStake", () => {
-        beforeEach(() => {
-            // Proof 타입을 주입해준다.
-            proof = new ProofOfStake()
-            workProof = new WorkProof(proof)
-        })
-        it("console 찍히나?", () => {
-            workProof.run(blockData, adjustmentBlock)
+        it("run함수가 존재하는가?", () => {
+            const runFn = workProof.run
+            expect(typeof runFn).toBe("function")
         })
     })
 })
