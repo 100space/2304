@@ -37,6 +37,11 @@ class Wallet {
         return accounts
     }
 
+    public get(account: string): Accounts {
+        const [response] = this.accounts.filter((v) => v.account === account)
+        return response
+    }
+
     private getPrivate(account: string): string {
         return this.accounts.filter((v) => v.account === account)[0].privateKey
     }

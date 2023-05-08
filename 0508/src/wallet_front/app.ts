@@ -15,13 +15,41 @@ export default (accounts: Wallet) => {
     app.get("/", (req, res) => {
         res.render("index")
     })
-    app.post("/wallet", (req, res) => {
+    app.post("/wallet", async (req, res) => {
         const account = accounts.create()
-        res.json(account)
+        const {
+            data: { balance },
+        } = await axios.post("http://127.0.0.1:8545/getBalance", {
+            account: account.account,
+        })
+        res.json({ ...account, balance })
     })
     app.get("/wallet", (req, res) => {
         const accountList = accounts.getAccounts()
         res.json(accountList)
+    })
+
+    app.get("/wallet/:account", async (req, res) => {
+        const account = accounts.get(req.params.account)
+        const {
+            data: { balance },
+        } = await axios.post("http://127.0.0.1:8545/getBalance", {
+            account: account.account,
+        })
+        res.json({ ...account, balance })
+    })
+    app.post("/transaction", (req, res) => {
+        const { sender, receipt, amount } = req.body
+        const {publicKey} = accounts.get(sender)
+        const receipt = {
+            sender: {
+                account: sender,
+                publicKey
+            }
+            received,
+            amount
+
+        }
     })
     return app
 }
