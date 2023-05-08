@@ -16,7 +16,8 @@
             "@comment/*": ["comment/*"],
             "@types/*": ["types/*"],
             "@core/*": ["core/*"],
-            "@constasnts/*": ["constasnts/*"]
+            "@constasnts/*": ["constasnts/*"],
+            "@server/*": ["server/*"]
         }
     },
     "include": ["./src/**/*", "__tests__", "test.js"],
