@@ -1,10 +1,12 @@
 import { IBlock } from "@core/block/block.interface"
 import { Handler } from "express"
 import net, { Socket } from "net"
+import Message from "./message"
 import { MessageData } from "./network.interface"
 
 class P2PNetwork {
     private readonly sockets: Socket[] = []
+    constructor(private readonly message: Message) {}
     listen(port: number) {
         const connection = (socket: Socket) => this.handleConnection(socket)
         const server = net.createServer(connection)
@@ -22,9 +24,11 @@ class P2PNetwork {
         this.sockets.push(socket)
         // 브로드케스트
 
-        this.dataHandler(socket)
+        const dataCallback = (data: Buffer) => this.message.handler(socket, data)
+        socket.on("data", dataCallback)
 
         const message: MessageData = {
+            // 요청을 위한 데이터
             type: "latestBlock",
             payload: {} as IBlock,
         }
@@ -33,18 +37,6 @@ class P2PNetwork {
         const disconnect = () => this.handleDisconnect(socket)
         socket.on("close", disconnect)
         socket.on("error", disconnect)
-    }
-
-    private dataHandler(socket: Socket) {
-        const callback = (data: Buffer) => {
-            const { type, payload } = JSON.parse(data.toString("utf-8"))
-            if (type === "latestBlock") {
-            } else if (type === "allBlock") {
-            } else if (type === "") {
-            }
-            console.log(type, payload)
-        }
-        socket.on("data", callback)
     }
 
     private handleDisconnect(socket: Socket) {

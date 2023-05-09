@@ -4,7 +4,6 @@ import { Proof, ProofProps } from "./workproof.interface"
 class WorkProof {
     constructor(private readonly proof: Proof) {}
     run(blockData: BlockData, adjustmentBlock: IBlock): IBlock {
-        console.log(blockData, adjustmentBlock, 11111)
         const props: ProofProps = {
             blockData,
             adjustmentBlock,
