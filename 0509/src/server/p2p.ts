@@ -36,10 +36,15 @@ class P2PNetwork {
     }
 
     private dataHandler(socket: Socket) {
-        socket.on("data", (data: Buffer) => {
+        const callback = (data: Buffer) => {
             const { type, payload } = JSON.parse(data.toString("utf-8"))
+            if (type === "latestBlock") {
+            } else if (type === "allBlock") {
+            } else if (type === "") {
+            }
             console.log(type, payload)
-        })
+        }
+        socket.on("data", callback)
     }
 
     private handleDisconnect(socket: Socket) {
