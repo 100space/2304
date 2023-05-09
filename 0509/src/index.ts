@@ -35,6 +35,8 @@ const app = App(baekspace)
 // })
 const { account } = accounts.create()
 baekspace.mineBlock(account)
+baekspace.mineBlock(account)
+baekspace.mineBlock(account)
 
 const message = new Message(baekspace)
 const p2p = new P2PNetwork(message)

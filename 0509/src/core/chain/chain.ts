@@ -27,12 +27,6 @@ class Chain {
         return this.latestBlock() // push 했으면 최신 블록이 받은 블록이기 때문에 확인을 할 수 있게 해준다.
     }
 
-    //블록의 검증을 위한... 블록의 높이가 안맞는다면 배열에 추가할 수 없도록 검증하는 과정이 있어야한다.
-    public isValid() {}
-
-    //네트워크에서 필요한 메서드로, 최신화가 되지않은 chain을 최신화를 하기위해서 만드는 메서드
-    public replaceChain() {}
-
     // 조건에 해당하는 블록을 구할 때 중복된 블록을 찾는 로직을 따로 빼서 관리하기 위한 메서드
     //getBlockbyHash, getBlockbyHeight
     public getBlock(callbackFn: (block: IBlock) => boolean) {
@@ -69,6 +63,18 @@ class Chain {
     public deserialize(chunk: string) {
         return JSON.parse(chunk)
     }
+    //블록의 검증을 위한... 블록의 높이가 안맞는다면 배열에 추가할 수 없도록 검증하는 과정이 있어야한다.
+    public isValidChain(receivedBlock: IBlock) {
+        const latestBlock = this.latestBlock()
+        if (latestBlock.height > receivedBlock.height) {
+            return false
+        } else if (latestBlock.timestamp > receivedBlock.timestamp) {
+            return false
+        }
+        return true
+    }
+    //네트워크에서 필요한 메서드로, 최신화가 되지않은 chain을 최신화를 하기위해서 만드는 메서드
+    public replaceChain() {}
 }
 
 export default Chain

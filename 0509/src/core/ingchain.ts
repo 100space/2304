@@ -9,7 +9,7 @@ import { Receipt } from "./wallet/wallet.interface"
 class Ingchain {
     constructor(
         public readonly chain: Chain,
-        private readonly block: Block,
+        public readonly block: Block,
         private readonly transaction: Transaction,
         private readonly unspent: Unspent,
         public readonly accounts: Wallet
