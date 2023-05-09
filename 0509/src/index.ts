@@ -9,6 +9,7 @@ import Unspent from "@core/transaction/unspent"
 import DigitalSignature from "@core/wallet/digitalSignature"
 import Wallet from "@core/wallet/wallet"
 import App from "@server/app"
+import P2PNetwork from "@server/p2p"
 
 const chain = new Chain()
 
@@ -28,6 +29,8 @@ const baekspace = new Ingchain(chain, block, transaction, unspent, accounts)
 
 const app = App(baekspace)
 
-app.listen(8545, () => {
-    console.log(`server start`)
-})
+// app.listen(8545, () => {
+//     console.log(`server start`)
+// })
+const p2p = new P2PNetwork()
+p2p.listne(8555)
