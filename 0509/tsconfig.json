@@ -7,10 +7,10 @@
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "strict": true,
-        "typeRoots": ["node_modules/@types", "src/@types"],
-        "types": ["jest"],
+        // "typeRoots": ["node_modules/@types", "src/@types"],
+        // "types": ["jest"],
         "baseUrl": "./src",
-        "lib": ["ES2017"],
+        // "lib": ["ES6", "DOM"],
         "paths": {
             "@wallet_front/*": ["wallet_front/*"],
             "@board/*": ["board/*"],

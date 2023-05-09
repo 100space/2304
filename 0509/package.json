@@ -8,7 +8,8 @@
         "build": "tsc && tsc-alias",
         "test": "jest",
         "exec": "ts-node -r tsconfig-paths/register src/index.ts",
-        "wallet": "ts-node -r tsconfig-paths/register src/wallet_front/index.ts"
+        "wallet": "ts-node -r tsconfig-paths/register src/wallet_front/index.ts",
+        "client": "ts-node -r tsconfig-paths/register src/client.ts"
     },
     "keywords": [],
     "author": "",
@@ -42,6 +43,7 @@
         "elliptic": "^6.5.4",
         "express": "^4.18.2",
         "merkle": "^0.6.0",
+        "net": "^1.0.2",
         "nunjucks": "^3.2.4"
     }
 }
