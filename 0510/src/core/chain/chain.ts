@@ -64,13 +64,9 @@ class Chain {
         return JSON.parse(chunk)
     }
     //블록의 검증을 위한... 블록의 높이가 안맞는다면 배열에 추가할 수 없도록 검증하는 과정이 있어야한다.
-    public isValidChain(receivedBlock: IBlock) {
-        const latestBlock = this.latestBlock()
-        if (latestBlock.height > receivedBlock.height) {
-            return false
-        } else if (latestBlock.timestamp > receivedBlock.timestamp) {
-            return false
-        }
+    public isValidChain(newBlock: IBlock, previousBlock: IBlock): boolean {
+        if (previousBlock.height + 1 !== newBlock.height) return false
+        if (previousBlock.hash !== newBlock.previousHash) return false
         return true
     }
     //네트워크에서 필요한 메서드로, 최신화가 되지않은 chain을 최신화를 하기위해서 만드는 메서드

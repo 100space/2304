@@ -19,13 +19,29 @@ class P2PNetwork {
         socket.connect(port, host, connection)
     }
 
+    private messageHandler(socket: Socket) {
+        const dataCallback = (data: Buffer) => {
+            const message = this.message.handler(socket, data)
+
+            if (!message) return
+            console.log(`message : ${message}`)
+
+            if (socket.write(message)) {
+                console.log(`소켓 버퍼가 가득차서 드레인 이벤트를 기다리고 있습니다.`)
+                socket.once("drain", () => {
+                    console.log(`소켓 버퍼가 고갈되어 메세지를 다시 보냅니다.`)
+                    dataCallback(data)
+                })
+            }
+        }
+        socket.on("data", dataCallback)
+    }
     private handleConnection(socket: Socket) {
         console.log(`[+] New Connection from ${socket.remoteAddress}:${socket.remotePort}`)
         this.sockets.push(socket)
         // 브로드케스트
 
-        const dataCallback = (data: Buffer) => this.message.handler(socket, data)
-        socket.on("data", dataCallback)
+        this.messageHandler(socket)
 
         const message: MessageData = {
             // 요청을 위한 데이터
