@@ -145,6 +145,10 @@ class Transaction {
 
         if (index !== -1) this.transactionPool.splice(index, 1)
     }
+
+    addPool(transaction: TransactionRow) {
+        this.transactionPool.push(transaction)
+    }
 }
 
 export default Transaction

@@ -1,3 +1,4 @@
+import { IBlock } from "@core/block/block.interface"
 import Ingchain from "@core/ingchain"
 import { TransactionRow } from "@core/transaction/transaction.interface"
 import { Socket } from "net"
@@ -8,6 +9,7 @@ class Message {
     handler(socket: Socket, data: Buffer) {
         try {
             const { type, payload } = JSON.parse(data.toString("utf8"))
+            console.log(type, payload)
             const message = (this as any)[type](payload) // 대괄호 표기법을 이용한 호출 - if문 없이 작동할 수 있다.
 
             return message
@@ -19,7 +21,7 @@ class Message {
     //메세지를 받은 사람이 호출을 한다.
     private latestBlock(payload: Payload): string | undefined {
         console.log("latestBlock")
-        return JSON.stringify(this.getAllBlockMessage())
+        return this.getAllBlockMessage()
     }
     private allBlock(payload: Payload): string | undefined {
         console.log("allBlock")
@@ -30,6 +32,24 @@ class Message {
         const result = this.blockchain.addBlock(payload)
         if (result) return
         return this.getReceivedChainMessage()
+    }
+
+    private receivedChain(payload: Payload) {
+        //IBlock[]
+        console.log("receivedChain")
+        if (!Array.isArray(payload)) return
+        if (payload instanceof TransactionRow) return
+
+        this.blockchain.replaceChain(payload)
+    }
+
+    private receivedTransaction(payload: Payload) {
+        if (Array.isArray(payload)) return
+        if (payload instanceof IBlock) return
+        console.log(`업데이트 : 트랜잭션 내용이 추가되었습니다. Peer들에게 전달합니다.`)
+
+        this.blockchain.replaceTransaction(payload)
+        return this.getReceivedTransactionMessage(payload)
     }
 
     getLatestBlockMessage() {

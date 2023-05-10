@@ -69,8 +69,20 @@ class Chain {
         if (previousBlock.hash !== newBlock.previousHash) return false
         return true
     }
-    //네트워크에서 필요한 메서드로, 최신화가 되지않은 chain을 최신화를 하기위해서 만드는 메서드
-    public replaceChain() {}
+    public isValidAllChain(chain: IBlock[]) {
+        // 제네시스 블록은 검증안해도 된다.
+        for (let i = 1; i < chain.length; i++) {
+            const currentBlock = chain[i]
+            const previousBlock = chain[i - 1]
+            const isVaildBlock = this.isValidChain(currentBlock, previousBlock)
+            if (!isVaildBlock) return false
+        }
+        return true
+    }
+
+    public clearChain() {
+        this.chain.splice(1)
+    }
 }
 
 export default Chain
