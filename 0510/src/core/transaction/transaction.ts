@@ -149,6 +149,10 @@ class Transaction {
     addPool(transaction: TransactionRow) {
         this.transactionPool.push(transaction)
     }
+
+    containsTransaction(transaction: TransactionRow) {
+        return this.transactionPool.some((tx: TransactionRow) => tx.hash === transaction.hash)
+    }
 }
 
 export default Transaction

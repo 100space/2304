@@ -27,22 +27,19 @@ const digitalSignature = new DigitalSignature(crypto)
 const accounts = new Wallet(digitalSignature)
 
 const baekspace = new Ingchain(chain, block, transaction, unspent, accounts)
-
-const app = App(baekspace)
-
-// app.listen(8545, () => {
-//     console.log(`server start`)
-// })
-const { account } = accounts.create()
-baekspace.mineBlock(account)
-baekspace.mineBlock(account)
-baekspace.mineBlock(account)
-baekspace.mineBlock(account)
-baekspace.mineBlock(account)
-baekspace.mineBlock(account)
-baekspace.mineBlock(account)
-baekspace.mineBlock(account)
-
 const message = new Message(baekspace)
 const p2p = new P2PNetwork(message)
-p2p.listen(8555)
+const { account: account1 } = accounts.create()
+baekspace.mineBlock(account1)
+// baekspace.mineBlock(account1)
+baekspace.mineBlock(account1)
+for (let i = 0; i < 1000; i++) {
+    console.log(i)
+    baekspace.mineBlock(account1)
+}
+const app = App(baekspace, p2p)
+
+const account = app.listen(8545, () => {
+    console.log(`server start`)
+    p2p.listen(8557)
+})

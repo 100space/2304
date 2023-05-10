@@ -11,7 +11,7 @@ class Ingchain {
     constructor(
         public readonly chain: Chain,
         public readonly block: Block,
-        private readonly transaction: Transaction,
+        public readonly transaction: Transaction,
         private readonly unspent: Unspent,
         public readonly accounts: Wallet
     ) {}
@@ -43,6 +43,7 @@ class Ingchain {
         const balance = this.unspent.getAmount(myUnspentTxOuts)
         if (balance < receipt.amount) throw new Error("잔액이 부족합니다.")
         const tx = this.transaction.create(receipt, myUnspentTxOuts)
+        return tx
     }
     public addBlock(receviedBlock: IBlock) {
         // 받은 블록이 올바른지 검증
@@ -51,13 +52,15 @@ class Ingchain {
         // 1개차이로 바로 내 체인에 넣을 수 있는지 아닌지 판단
         const isValid = this.chain.isValidChain(receviedBlock, this.chain.latestBlock())
         if (!isValid) return false
+        this.unspent.sync(receviedBlock.data)
+        this.transaction.sync(receviedBlock.data)
+
         this.chain.addToChain(receviedBlock)
         console.log("블록 내용이 체인에 추가되었습니다.")
         return true
     }
     //네트워크에서 필요한 메서드로, 최신화가 되지않은 chain을 최신화를 하기위해서 만드는 메서드
     public replaceChain(receivedChain: IBlock[]): void {
-        console.log(receivedChain, 11111123213123)
         if (receivedChain.length === 1) return
         //긴체인이 이기지만, 긴체인이 제대로된 체인인지를 검증부터 해야한다.
         const isvalidChain = this.chain.isValidAllChain(receivedChain)
@@ -82,8 +85,12 @@ class Ingchain {
         console.log(`체인이 변경되었습니다.`)
     }
     public replaceTransaction(receivedTransaction: TransactionRow) {
+        // 받은 트랜잭션 내용의 검증이 필요하지만..일단은 넘어간다.
         //받은 트랜잭션이 나의 풀에 있는 것인가?  없다면 풀에 푸쉬하고 있다면 return
-        this.transaction.getPool()
+        const withTransaction = this.transaction.containsTransaction(receivedTransaction)
+        if (withTransaction) return
+        this.transaction.addPool(receivedTransaction)
+        console.log(`transaction : ${receivedTransaction} 내용이 추가 되었습니다.`)
     }
 }
 export default Ingchain

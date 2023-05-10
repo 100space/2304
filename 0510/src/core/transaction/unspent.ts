@@ -46,6 +46,7 @@ class Unspent {
     //내 UTXO만 뽑아오는 메서드
     me(account: string): UnspentTxOut[] {
         // const utxo = this.UnspentTxOuts
+
         const myUnspentTxOuts = this.unspentTxOuts.filter((utxo) => utxo.account === account)
         return myUnspentTxOuts
     }

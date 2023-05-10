@@ -1,7 +1,7 @@
 import { IBlock } from "core/block/block.interface"
 export const VERSION = "1.0.0"
 
-export const BLOCK_GENERATION_INTERVAL = 10 * 60
+export const BLOCK_GENERATION_INTERVAL = 10
 export const DIFFICULTY_ADJUSTMENT_INTERVAL = 10
 
 export const GENESIS: IBlock = {

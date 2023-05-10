@@ -1,7 +1,8 @@
 import Ingchain from "@core/ingchain"
 import express from "express"
+import P2PNetwork from "./p2p"
 
-export default (blockchain: Ingchain) => {
+export default (blockchain: Ingchain, p2p: P2PNetwork) => {
     const app = express()
     app.use(express.json())
 
@@ -30,6 +31,7 @@ export default (blockchain: Ingchain) => {
     app.post("/mineblock", (req, res) => {
         const { account } = req.body
         const newBlock = blockchain.mineBlock(account)
+        p2p.broadcast(p2p.message.getAllBlockMessage())
         res.json(newBlock)
     })
 
@@ -38,9 +40,27 @@ export default (blockchain: Ingchain) => {
         console.log(receipt.amount)
         receipt.amount = parseInt(receipt.amount)
         const transaction = blockchain.sendTransaction(receipt)
+        p2p.broadcast(p2p.message.getReceivedTransactionMessage(transaction))
         res.json({
             transaction,
         })
+    })
+
+    app.post("/addPeer", (req, res) => {
+        const { host, port } = req.body
+        console.log(port)
+        p2p.connet(parseInt(port), host)
+        res.send("connection 성공")
+    })
+
+    app.get("/peers", (req, res) => {
+        const sockets = p2p.sockets.map((socket) => `${socket.remoteAddress}:${socket.remotePort}`)
+        res.json(sockets)
+    })
+
+    app.get("/view", (req, res) => {
+        const blocks = blockchain.chain.get()
+        res.send(blocks)
     })
     return app
 }

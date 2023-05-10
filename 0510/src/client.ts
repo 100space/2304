@@ -28,10 +28,9 @@ const accounts = new Wallet(digitalSignature)
 
 const baekspace = new Ingchain(chain, block, transaction, unspent, accounts)
 
-const app = App(baekspace)
-
 const message = new Message(baekspace)
 const p2p = new P2PNetwork(message)
+const app = App(baekspace, p2p)
 
 p2p.listen(8556)
 p2p.connet(8555, "127.0.0.1")

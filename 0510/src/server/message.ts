@@ -6,10 +6,8 @@ import { MessageData, Payload } from "./network.interface"
 
 class Message {
     constructor(private readonly blockchain: Ingchain) {}
-    handler(socket: Socket, data: Buffer) {
+    handler(type: string, payload: Payload) {
         try {
-            const { type, payload } = JSON.parse(data.toString("utf8"))
-            console.log(type, payload)
             const message = (this as any)[type](payload) // 대괄호 표기법을 이용한 호출 - if문 없이 작동할 수 있다.
 
             return message
@@ -19,7 +17,7 @@ class Message {
     }
 
     //메세지를 받은 사람이 호출을 한다.
-    private latestBlock(payload: Payload): string | undefined {
+    private latestBlock(): string | undefined {
         console.log("latestBlock")
         return this.getAllBlockMessage()
     }
@@ -49,7 +47,7 @@ class Message {
         console.log(`업데이트 : 트랜잭션 내용이 추가되었습니다. Peer들에게 전달합니다.`)
 
         this.blockchain.replaceTransaction(payload)
-        return this.getReceivedTransactionMessage(payload)
+        // return this.getReceivedTransactionMessage(payload)
     }
 
     getLatestBlockMessage() {

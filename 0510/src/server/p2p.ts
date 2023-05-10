@@ -1,12 +1,11 @@
 import { IBlock } from "@core/block/block.interface"
-import { Handler } from "express"
 import net, { Socket } from "net"
 import Message from "./message"
-import { MessageData } from "./network.interface"
+import { MessageData, Payload } from "./network.interface"
 
 class P2PNetwork {
-    private readonly sockets: Socket[] = []
-    constructor(private readonly message: Message) {}
+    public readonly sockets: Socket[] = []
+    constructor(public readonly message: Message) {}
     listen(port: number) {
         const connection = (socket: Socket) => this.handleConnection(socket)
         const server = net.createServer(connection)
@@ -19,29 +18,43 @@ class P2PNetwork {
         socket.connect(port, host, connection)
     }
 
+    private isJSON(buffer: Buffer) {
+        try {
+            JSON.parse(buffer.toString("utf8"))
+            return true
+        } catch (e) {
+            return false
+        }
+    }
     private messageHandler(socket: Socket) {
-        const dataCallback = (data: Buffer) => {
-            const message = this.message.handler(socket, data)
-
-            if (!message) return
-            console.log(`message : ${message}`)
-
-            if (socket.write(message)) {
-                console.log(`소켓 버퍼가 가득차서 드레인 이벤트를 기다리고 있습니다.`)
-                socket.once("drain", () => {
-                    console.log(`소켓 버퍼가 고갈되어 메세지를 다시 보냅니다.`)
-                    dataCallback(data)
-                })
+        let buffer: Buffer | undefined
+        return (data: Buffer) => {
+            if (this.isJSON(data)) {
+                const { type, payload } = JSON.parse(data.toString("utf8"))
+                const message = this.message.handler(type, payload)
+                if (!message) return
+                if (!socket.write(message)) {
+                    socket.once("drain", this.messageHandler(socket))
+                }
+            } else {
+                buffer = !buffer ? data : Buffer.concat([buffer, data])
+                if (!this.isJSON(buffer)) return this.messageHandler(socket)
+                const { type, payload } = JSON.parse(buffer.toString("utf8"))
+                const message = this.message.handler(type, payload)
+                if (!message) return
+                if (!socket.write(message)) {
+                    socket.once("drain", this.messageHandler(socket))
+                }
             }
         }
-        socket.on("data", dataCallback)
     }
+
     private handleConnection(socket: Socket) {
         console.log(`[+] New Connection from ${socket.remoteAddress}:${socket.remotePort}`)
         this.sockets.push(socket)
         // 브로드케스트
 
-        this.messageHandler(socket)
+        socket.on("data", this.messageHandler(socket).bind(this))
 
         const message: MessageData = {
             // 요청을 위한 데이터
@@ -51,6 +64,7 @@ class P2PNetwork {
         socket.write(JSON.stringify(message))
 
         const disconnect = () => this.handleDisconnect(socket)
+        socket.on("drain", this.messageHandler(socket).bind(this))
         socket.on("close", disconnect)
         socket.on("error", disconnect)
     }
@@ -60,6 +74,10 @@ class P2PNetwork {
         if (index === -1) return
         this.sockets.splice(index, 1)
         console.log(`[-] Connection from ${socket.remoteAddress}:${socket.remotePort} closed`)
+    }
+
+    public broadcast(message: string) {
+        this.sockets.forEach((socket) => socket.write(message))
     }
 }
 
