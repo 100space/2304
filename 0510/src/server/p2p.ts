@@ -52,8 +52,6 @@ class P2PNetwork {
     private handleConnection(socket: Socket) {
         console.log(`[+] New Connection from ${socket.remoteAddress}:${socket.remotePort}`)
         this.sockets.push(socket)
-        // 브로드케스트
-
         socket.on("data", this.messageHandler(socket).bind(this))
 
         const message: MessageData = {
