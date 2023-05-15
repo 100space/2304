@@ -1,10 +1,12 @@
 import Ingchain from "@core/ingchain"
 import express from "express"
 import P2PNetwork from "./p2p"
+import cors from "cors"
 
 export default (blockchain: Ingchain, p2p: P2PNetwork) => {
     const app = express()
     app.use(express.json())
+    app.use(cors({ origin: true, credentials: true }))
 
     app.get("/", (req, res) => {
         res.send("hello ingchain")
@@ -61,6 +63,10 @@ export default (blockchain: Ingchain, p2p: P2PNetwork) => {
     app.get("/view", (req, res) => {
         const blocks = blockchain.chain.get()
         res.send(blocks)
+    })
+    app.get("/txpool", (req, res) => {
+        const txpool = blockchain.transaction.getPool()
+        res.json(txpool)
     })
     return app
 }

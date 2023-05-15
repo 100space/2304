@@ -1,6 +1,7 @@
 import express from "express"
 import nunjucks from "nunjucks"
 import axios from "axios"
+import cors from "cors"
 import path from "path"
 import Wallet from "@core/wallet/wallet"
 
@@ -8,6 +9,7 @@ export default (accounts: Wallet) => {
     const app = express()
     const viewDir = path.join(__dirname, "views")
     app.use(express.json())
+    app.use(cors({ origin: true, credentials: true }))
     app.set("view engine", "html")
     nunjucks.configure(viewDir, {
         express: app,

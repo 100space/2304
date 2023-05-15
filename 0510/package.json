@@ -35,10 +35,12 @@
         }
     },
     "dependencies": {
+        "@types/cors": "^2.8.13",
         "@types/crypto-js": "^4.1.1",
         "@types/elliptic": "^6.4.14",
         "@types/merkle": "^0.6.1",
         "axios": "^1.4.0",
+        "cors": "^2.8.5",
         "crypto-js": "^4.1.1",
         "elliptic": "^6.5.4",
         "express": "^4.18.2",

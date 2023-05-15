@@ -33,13 +33,13 @@ const { account: account1 } = accounts.create()
 baekspace.mineBlock(account1)
 // baekspace.mineBlock(account1)
 baekspace.mineBlock(account1)
-for (let i = 0; i < 1000; i++) {
-    console.log(i)
-    baekspace.mineBlock(account1)
-}
+// for (let i = 0; i < 1000; i++) {
+//     console.log(i)
+//     baekspace.mineBlock(account1)
+// }
 const app = App(baekspace, p2p)
 
 const account = app.listen(8545, () => {
     console.log(`server start`)
-    p2p.listen(8557)
+    p2p.listen(8555)
 })
