@@ -21,7 +21,7 @@ export const gettxpool = async (): Promise<string[]> => {
     return allAccounts
 }
 export const Button: React.FC<IButton> = ({ text, width, margin, height, children, type }) => {
-    const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>()
+    const dispatch = useDispatch<ThunkDispatch<RootState, {}, AnyAction>>()
     const { isOpen, account: currentaccount } = useSelector((state: RootState) => state.accountState)
     const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
         const target = e.target as HTMLButtonElement

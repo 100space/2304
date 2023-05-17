@@ -5,7 +5,6 @@ import { SubJect } from "@components/subject"
 import { memo, useState } from "react"
 import { AccountWrap } from "./styled/myAccount.styled"
 import circleArrow from "@img/circleadd.png"
-import requestServer from "utils/requestServer"
 import { useDispatch, useSelector } from "react-redux"
 import { AnyAction } from "redux"
 import { ThunkDispatch } from "redux-thunk"
@@ -14,7 +13,7 @@ import { changeMyAccount } from "store/myAccounts"
 import { AccountText } from "@components/account"
 
 export const AllAccount = memo(() => {
-    const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>()
+    const dispatch = useDispatch<ThunkDispatch<RootState, {}, AnyAction>>()
     const { account }: { account: string } = useSelector((state: RootState) => state.accountState)
 
     const [drop, setDrop] = useState(false)
@@ -22,9 +21,7 @@ export const AllAccount = memo(() => {
         setDrop(!drop)
     }
     const handleCreate = async () => {
-        await requestServer.post("/wallet")
-        const { data: getaccount } = await requestServer.get("/wallet")
-        dispatch(changeMyAccount(getaccount))
+        dispatch(changeMyAccount())
     }
     return (
         <AccountWrap>
