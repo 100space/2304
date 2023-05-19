@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.0;
 
 contract Counter{
     uint256 value = 0;
@@ -12,4 +12,4 @@ contract Counter{
         // 상태변수를 변화시키지 않고 바로 출력하기 위해서 view를 쓴다.
         return value;
     } 
-} 
+}
