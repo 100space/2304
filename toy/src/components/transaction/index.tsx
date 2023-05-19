@@ -5,14 +5,12 @@ import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { RootState } from "store"
 import requestServer from "utils/requestServer"
-import { TransactionForm, TransactionWrap } from "./styled/transaction.styled"
+import { ButtonStyleDiv, TransactionForm, TransactionWrap } from "./styled/transaction.styled"
 
 export const MainTransaction = () => {
     const [txState, setTxState] = useState(true)
     const { account } = useSelector((state: RootState) => state.accountState)
-    console.log(account, 111)
     const { data } = useSelector((state: RootState) => state.menuState)
-
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const target = e.target as HTMLFormElement
@@ -34,7 +32,6 @@ export const MainTransaction = () => {
     }
     const getTxlist = async () => {
         const tx = (await gettxpool()).indexOf(account)
-        console.log(tx, 2222)
         if (tx >= 0) {
             setTxState(false)
         } else {
@@ -59,9 +56,9 @@ export const MainTransaction = () => {
                     {txState ? (
                         <Button text="Send" width={30} margin={3} type="submit"></Button>
                     ) : (
-                        <Button width={30} margin={3} type="reset">
+                        <ButtonStyleDiv width={30} margin={3}>
                             <Loading />
-                        </Button>
+                        </ButtonStyleDiv>
                     )}
                 </TransactionForm>
             </TransactionWrap>

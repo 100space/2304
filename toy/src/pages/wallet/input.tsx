@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useState } from "react"
 import add from "@img/add.png"
 import { useDispatch, useSelector } from "react-redux"
 import { AnyAction } from "redux"
@@ -8,7 +8,6 @@ import { changeSavedAccount } from "store/savedAccount"
 import { InputWrap, InputAccount } from "./styled"
 
 export const InputComponent = () => {
-    const Inputref = useRef(null)
     const [value, setValue] = useState("")
     const { savedaccounts }: { savedaccounts: string[] } = useSelector((state: RootState) => state.savedAccountState)
     const dispatch = useDispatch<ThunkDispatch<RootState, {}, AnyAction>>()
@@ -26,7 +25,7 @@ export const InputComponent = () => {
     }
     return (
         <InputWrap>
-            <InputAccount ref={Inputref} onChange={handleInput} value={value} />
+            <InputAccount onChange={handleInput} value={value} />
             <img src={add} alt="" onClick={handleAdd} />
         </InputWrap>
     )

@@ -43,6 +43,7 @@ export default (accounts: Wallet) => {
     app.post("/transaction", async (req, res) => {
         try {
             const { sender, received, amount } = req.body
+            console.log(sender, received, amount, "servererer")
             const { publicKey, privateKey } = accounts.get(sender)
             const receipt = accounts.sign(
                 {

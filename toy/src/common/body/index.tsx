@@ -6,8 +6,7 @@ import { BodyWrap } from "./styled"
 
 export const Body = () => {
     const { data } = useSelector((state: RootState) => state.menuState)
-    const { isOpen, account } = useSelector((state: RootState) => state.accountState)
-    console.log(isOpen, account)
+    const { isOpen } = useSelector((state: RootState) => state.accountState)
     return (
         <>
             <BodyWrap activeState={data} isOpen={isOpen}>

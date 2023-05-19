@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-interface ButtonProps {
+export interface ButtonProps {
     width: number
     margin?: number
     height?: number

@@ -13,7 +13,7 @@ export const ListComponent = () => {
     const dispatch = useDispatch<ThunkDispatch<RootState, {}, AnyAction>>()
     const { savedaccounts }: { savedaccounts: string[] } = useSelector((state: RootState) => state.savedAccountState)
     const handleDelete = (e: React.MouseEvent<HTMLImageElement>) => {
-        const target = (e.target as HTMLImageElement).previousElementSibling as HTMLDivElement
+        const target = e.currentTarget.previousElementSibling as HTMLDivElement
         const newSaveAccounts = savedaccounts.filter((v) => v !== target.title)
         dispatch(changeSavedAccount(newSaveAccounts))
     }

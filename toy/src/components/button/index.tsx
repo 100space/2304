@@ -24,8 +24,8 @@ export const Button: React.FC<IButton> = ({ text, width, margin, height, childre
     const dispatch = useDispatch<ThunkDispatch<RootState, {}, AnyAction>>()
     const { isOpen, account: currentaccount } = useSelector((state: RootState) => state.accountState)
     const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
-        const target = e.target as HTMLButtonElement
-        if (target.innerHTML === "거래 하기") {
+        const target = e.currentTarget.innerHTML
+        if (target === "거래 하기") {
             dispatch(changeAccount(currentaccount, !isOpen))
         }
     }
