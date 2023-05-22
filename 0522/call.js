@@ -33,4 +33,14 @@ const dataCode = web3.eth.abi.encodeFunctionCall(
     []
 )
 
-console.log(dataCode)
+web3.eth
+    .call({
+        // call Method는 가스가 소비되지 않는다.
+        to: "0x670D634d285e34f8bE6af5b44c126BD3cB4E67AC",
+        data: dataCode,
+    })
+    .then((data) => {
+        //16진수로 나오기 때문에 변환하면 10진수로 변환한다.
+        const result = web3.utils.toBN(data).toString(10)
+        console.log(result)
+    })
