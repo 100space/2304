@@ -1,4 +1,3 @@
-import "./App.css"
 import { useEffect, useState } from "react"
 import Web3 from "web3"
 
@@ -11,19 +10,18 @@ const App = () => {
             const [data] = await window.ethereum.request({
                 method: "eth_requestAccounts",
             })
+            console.log(data)
             setWeb3(new Web3(window.ethereum)) // 브라우저에서 월렛으로 요청하기 위해서 매핑을 한다.
             setAccount(data)
         })()
     }, [])
-    const handleClick = (e) => {
-        console.log("click 확인", web3)
+    const handleClick = () => {
         web3.eth.getBalance(account).then(console.log)
     }
     const handleSubmit = (e) => {
         e.preventDefault()
         const to = e.target.received.value
         const value = web3.utils.toWei(e.target.amount.value)
-
         const tx = {
             from: account,
             to,
