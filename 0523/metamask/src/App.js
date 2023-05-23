@@ -1,21 +1,49 @@
 import "./App.css"
 import { useEffect, useState } from "react"
+import Web3 from "web3"
 
 const App = () => {
     const [account, setAccount] = useState(null)
+    const [web3, setWeb3] = useState(null)
 
     useEffect(() => {
-        window.ethereum
-            .request({
-                // 메서드로 요청을 하게 되면 메타마스크에 연결을 위한 요청이 온다. 원하는 계좌를 선택해서 커넥트를 맺을 수 있다.
+        ;(async () => {
+            const [data] = await window.ethereum.request({
                 method: "eth_requestAccounts",
             })
-            .then((data) => {
-                setAccount(...data)
-            })
+            setWeb3(new Web3(window.ethereum)) // 브라우저에서 월렛으로 요청하기 위해서 매핑을 한다.
+            setAccount(data)
+        })()
     }, [])
+    const handleClick = (e) => {
+        console.log("click 확인", web3)
+        web3.eth.getBalance(account).then(console.log)
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        const to = e.target.received.value
+        const value = web3.utils.toWei(e.target.amount.value)
 
-    return <>{account || "로그인 전 입니다.."}</>
+        const tx = {
+            from: account,
+            to,
+            value,
+        }
+        web3.eth.sendTransaction(tx).then(console.log)
+    }
+
+    return (
+        <>
+            {account || "로그인 전 입니다.."}
+            <button onClick={handleClick}>Balance</button>
+            <br />
+            <form onSubmit={handleSubmit}>
+                <input type="text" id="received" placeholder="받을 계정" />
+                <input type="text" id="amount" placeholder="보낼 금액" />
+                <button type="submit">전송</button>
+            </form>
+        </>
+    )
 }
 
 export default App
