@@ -1,5 +1,5 @@
 import Web3 from "web3"
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
 
 const useWeb3 = () => {
     const [account, setAccount] = useState(null)
@@ -19,6 +19,6 @@ const useWeb3 = () => {
         init()
     }, [])
 
-    return [account, web3]
+    return [web3, account]
 }
 export default useWeb3
