@@ -33,7 +33,7 @@ export const AllAccount = memo(() => {
             <DropDown drop={drop} />
             <div id="BtnWrap">
                 <img src={circleArrow} alt="" onClick={handleCreate} />
-                <Button width={70} text="거래 하기" margin={4} type="button" />
+                <Button width={70} text="거래 하기" margin={4} />
             </div>
         </AccountWrap>
     )

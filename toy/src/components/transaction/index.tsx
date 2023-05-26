@@ -40,7 +40,6 @@ export const MainTransaction = () => {
     }
     useEffect(() => {
         getTxlist()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [account, txState, data])
     return (
         <>
@@ -54,7 +53,7 @@ export const MainTransaction = () => {
                         <input type="text" placeholder="보낼 금액" name="receivedAmount" />
                     </div>
                     {txState ? (
-                        <Button text="Send" width={30} margin={3} type="submit"></Button>
+                        <Button text="Send" width={30} margin={3}></Button>
                     ) : (
                         <ButtonStyleDiv width={30} margin={3}>
                             <Loading />

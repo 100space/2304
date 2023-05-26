@@ -12,7 +12,6 @@ interface IButton {
     width: number
     margin?: number
     height?: number
-    type: "submit" | "reset" | "button"
     children?: ReactElement<any, any>
 }
 export const gettxpool = async (): Promise<string[]> => {
@@ -20,7 +19,7 @@ export const gettxpool = async (): Promise<string[]> => {
     const allAccounts = data.flatMap((tx: { txOuts: any[] }) => tx.txOuts.map((out) => out.account))
     return allAccounts
 }
-export const Button: React.FC<IButton> = ({ text, width, margin, height, children, type }) => {
+export const Button: React.FC<IButton> = ({ text, width, margin, height, children }) => {
     const dispatch = useDispatch<ThunkDispatch<RootState, {}, AnyAction>>()
     const { isOpen, account: currentaccount } = useSelector((state: RootState) => state.accountState)
     const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
@@ -32,7 +31,7 @@ export const Button: React.FC<IButton> = ({ text, width, margin, height, childre
 
     return (
         <>
-            <ButtonSC width={width} type={type} margin={margin} onClick={handleClick} height={height}>
+            <ButtonSC width={width} margin={margin} onClick={handleClick} height={height}>
                 {text}
                 {children}
             </ButtonSC>
