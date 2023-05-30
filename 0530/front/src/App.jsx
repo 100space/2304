@@ -7,7 +7,7 @@ const App = () => {
     return (
         <>
             <h1> 사과가게 </h1>
-            <AppleShop />
+            <AppleShop web3={web3} account={account} />
         </>
     )
 }
