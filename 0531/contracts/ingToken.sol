@@ -8,6 +8,7 @@ contract IngToken is ERC20 {
     constructor() ERC20("ingToken","ITK"){ // JS의 super 키워드랑 같다.
         _mint(msg.sender, 1000 * (10 ** 18));
     }
+    
 }   
 
 

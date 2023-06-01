@@ -37,9 +37,17 @@ contract EthSwap {
         uint256 tokenAmount = msg.value * rate;
         require(token.balanceOf(token._owners()) >= tokenAmount, 'Error' );
         token.transferFrom(token._owners(), msg.sender, tokenAmount);
-        
-        
     }
     
     // Token -> ETH
+    function sellToken(uint256 _amount) public payable {
+        require(token.balanceOf(msg.sender)>= _amount , "not enough token");
+        uint256 etherAmount = _amount/rate;
+        require(address(this).balance >= etherAmount); // eth의 갯수
+        token.approve2(msg.sender, address(this), _amount);
+        token.transferFrom(msg.sender, token._owners(), _amount);
+
+        // payable(msg.sender) : to
+        payable(msg.sender).transfer(etherAmount);
+    }
 }

@@ -39,5 +39,18 @@ contract("EthSwap", ([deployed1, deployed2, account, account2]) => {
             console.log((await token.balanceOf(account)).toString()) // 실행할때 마다 ca가 바뀌기 때문에 100 만 찍힌다.
             console.log(await web3.eth.getBalance(swap.address))
         })
+        it("sellToken () 확인하기", async () => {
+            const balance = await token.balanceOf(account)
+            console.log("token:", balance.toString())
+            console.log("eth:", await web3.eth.getBalance(account))
+            console.log("owner:", (await token.balanceOf(deployed1)).toString())
+
+            await swap.sellToken(balance, {
+                from: account,
+            })
+            console.log("token2:", (await token.balanceOf(account)).toString())
+            console.log("eth2:", await web3.eth.getBalance(account))
+            console.log("owner2:", (await token.balanceOf(deployed1)).toString())
+        })
     })
 })

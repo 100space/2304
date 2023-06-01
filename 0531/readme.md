@@ -269,3 +269,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
 **17. \_beforeTokenTransfer(address from, address to, uint256 amount)**: 토큰 전송 전에 실행되는 함수이다. 필요할 경우 재정의하여 추가 로직을 실행할 수 있다. 기본상태는 로직이 없는 상태이다.
 
 **18. \_afterTokenTransfer(address from, address to, uint256 amount)**: 토큰 전송 후에 실행되는 함수이다. 필요할 경우 재정의하여 추가 로직을 실행할 수 있다. 기본상태는 로직이 없는 상태이다.
+
+# 0601
+
+데이터를 swap 인스턴스가 가지고 있는 것이 아닌 token인스턴스에 요청을 하여 가져오는 것이다.
