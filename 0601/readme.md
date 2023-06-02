@@ -49,6 +49,8 @@ NFT는 tokenId를 이용해서 소유자의 address를 찾는 것을 쉽게 구�
 
 기본적으로 제공되는 방법이 아닌 address를 가지고 모든 tokenId의 반복을 돌면서 address와 일치하는 tokenId를 구하는 방법으로 구현할 수 있다. (ex : balanceOf 함수를 이용해서 address가 보유한 NFT의 수량을 알 수 있기 때문에 tokenId의 반복을 돌면서 balanceOf의 갯수가 나오면 종료하는 방식으로 구할 수 있다.)
 
+<br/><br/><br/>
+
 # **4. ERC721 표준을 이용한 NFT 발행**
 
 ```sol
@@ -59,7 +61,6 @@ pragma solidity ^0.8.0;
 import "../node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 contract IngToken is ERC721 {
-    mapping(uint256 => string) metadatas;
     constructor(string memory _name, string memory _symbol)ERC721(_name, _symbol){}
 
     function _minting(uint256 _tokenId) public{
@@ -67,8 +68,50 @@ contract IngToken is ERC721 {
     }
 
     function tokenURI(uint256 _tokenId) public view override returns (string memory){
-        // return metadatas[_tokenId];
         return "https://gateway.pinata.cloud/ipfs/QmPwjnvWYN4etA5eW4yAbWCTy2ukEC1Jj5417VLGyH5XpU/1/1.json";
     }
 }
 ```
+
+기본적인 NFT 민팅을 위한 컨트랙트 코드이다.
+현재는 JSON을 고정적인 값을 넣어주기 때문에 생성된 NFT가 똑같은 메타데이터를 가지고 만들어진다.
+
+각각의 데이터를 개별적인 메타데이터로 만들기 위해서 URL을 반환하는 함수나 어떠한 로직을 이용해서 개별적인 URL을 반환하도록 해서 반환받은 각각 다른 URL을 이용해서 민팅을 하도록 한다.
+
+# ERC721 표준 메서드 종류 및 역할
+
+## ERC721 표준 상태변수
+
+## ERC721 표준 메서드 분석하기
+
+**1. supportsInterface(bytes4 interfaceId)** : 퍼블릭 함수 - 주어진 인터페이스ID가 맞는지 확인하는 함수이다. ERC721표준을 지켜서 NFT를 생성하게 되면 "0x80ac58cd" 값이 맞는지를 확인하는 것이고, T/F로 반환된다.
+
+**2. balanceOf(address owner)** : 퍼블릭 함수 - 특정 주소의 NFT토큰의 갯수를 구하는 함수이다. 해당 컨트랙트의 상태변수로 계정별 토큰의 갯수를 관리하고 있다.
+
+**3. ownerOf(uint256 tokenId)** : 퍼블릭 함수 - 특정 토큰ID를 가지고 있는 계정의 주소를 반환하는 함수이다.
+
+**4. name()** : 퍼블릭 함수 - NFT의 이름을 반환하는 함수이다.
+
+**5. symbol()** : 퍼블릭 함수 - NFT의 심볼(단위)를 반환하는 함수이다.
+
+**6. tokenURI(uint256 tokenId)** : 퍼블릭 함수 - 토큰ID의 URI를 반환하는 함수이다. 보통 json이 업로드 된 경로이다.
+
+**7. \_baseURI()** : 내부 함수 - 필요에 따라 baseURI를 지정하는데 사용하는 함수이다.
+
+**8. approve(address to, uint256 tokenId)** : 퍼블릭 함수 - "to"에게 토큰ID에 해당 하는 NFT를 거래할 수 있는 권한을 주는 함수이다.
+
+**9. getApproved(uint256 tokenId)** : 퍼블릭 함수 - 토큰ID의 권한을 가지고 있는 계정을 반환하는 함수이다. \_tokenApprovals에서 값을 찾는다.
+
+**10. setApprovalForAll(address operator, bool approved)** : 퍼블릭 함수 - 특정 주소가 가지고 있는 모든 NFT에 대한 권한을 부여할 때 사용한다.
+
+**11. isApprovedForAll(adress owner, address operator)** : 퍼블릭 함수 - operator에게 owner가 모든 NFT의 권한을 승인했는지 확인할 때 사용하는 함수이다.
+
+**12. transferFrom(address from, address to, uint256 tokenId)** : 퍼블릭 함수 - NFT를 전송할 때 사용하는 함수이다.
+
+**13. safeTransferFrom(address from, address to, uint256 tokenId)** : 퍼블릭 함수 -
+.
+.
+.
+.
+.
+**3. name()**
