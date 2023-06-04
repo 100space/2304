@@ -80,7 +80,59 @@ contract IngToken is ERC721 {
 
 # ERC721 표준 메서드 종류 및 역할
 
+ERC721은 대체 불가능한 토큰(NFT)를 생성할 때 사용하는 ERC표준이다.
+NFT는 객체 형태와 유사하기 때문에, 상태변수가 mapping 타입으로 되어있는 것이 많다.
+
+<br>
+<br>
+<br>
+
 ## ERC721 표준 상태변수
+
+**1. string private \_name** : 토큰의 이름을 저장한다.
+
+**2. string private \_symbol** : 토큰의 심볼(단위)을 저장한다.
+
+**3. mapping(uint256 => address) private \_owners** : \_owner는 특정토큰에 대한 소유자 주소로 매핑이 되어있으며 형태는 아래와 같다.
+
+```json
+{
+    "tokenId": "address"
+}
+```
+
+**4. mapping(address => uint256) private \_balances** : 계정과 계정이 소유하고 있는 토큰의 수량으로 매핑이 되어있으며, 계정을 이용해서 토큰의 갯수를 구할 수 있다.
+
+```json
+// 예를들어 "0x0000 계정에 NFT가 2개 있다면
+{
+    "0x0000": 2
+}
+```
+
+**5. mapping(uint256 => address) private \_tokenApprovals** : 토큰Id와 그 토큰Id에 대한 권한이 있는 계정이 매핑되어 있으며, 토큰Id를 이용해서 토큰Id를 전송할 수 있는 계정을 확인할 수 있다.
+
+```json
+{
+    "tokenId": "address"
+}
+```
+
+**6. mapping(address => mapping(address => bool)) private \_operatorApprovals** : 중첩 매핑으로 소유자의 토큰을 권한받은 계정과 승인여부에 대해서 매핑이 되어있다.
+승인 상태를 "\_operatorApprovals[소유자계정][대리인계정]"으로 확인할 수 있다.
+
+```json
+// 예를 들어 0x0000 계정이 0x1234 계정에게 토큰에 대한 권한을 주었다면
+{
+    "0x0000": {
+        "0x1234": true
+    }
+}
+```
+
+<br>
+<br>
+<br>
 
 ## ERC721 표준 메서드 분석하기
 
@@ -106,9 +158,44 @@ contract IngToken is ERC721 {
 
 **11. isApprovedForAll(adress owner, address operator)** : 퍼블릭 함수 - operator에게 owner가 모든 NFT의 권한을 승인했는지 확인할 때 사용하는 함수이다.
 
-**12. transferFrom(address from, address to, uint256 tokenId)** : 퍼블릭 함수 - NFT를 전송할 때 사용하는 함수이다.
+**12. transferFrom(address from, address to, uint256 tokenId)** : 퍼블릭 함수 - NFT를 전송할 때 사용하는 함수이다. (권한을 받은 계정이 사용하는 메서드이다.)
 
-**13. safeTransferFrom(address from, address to, uint256 tokenId)** : 퍼블릭 함수 -
+**13. safeTransferFrom(address from, address to, uint256 tokenId)** : 퍼블릭 함수 - 토큰을 안전하게 다른 주소로 이동하기 위해서 사용하는 메서드이다.
+
+**14. safeTransferFrom(address from, address to, uint256 tokenId, bytes memory data)** : 퍼블릭 함수 - 토큰을 안전하게 다른 주소로 이동하고 데이터를 전달하는 함수이다.
+
+**15. \_safeTransfer(address from, address to, uint256 tokenId, bytes memory data)** : 내부 함수 - 토큰을 안전하게 이동하는 내부 함수이다.
+
+**16. \_ownerOf(uint256 tokenId)** : 내부 함수 - tokenId를 이용해서 토큰의 소유자의 주소를 반환하는 함수이다.
+
+**17. \_exists(uint tokenId)** : 내부 함수 - 특정 tokenId가 존재하는지 확인하는 함수이다 (T/F)
+
+**18. \_isApprovedOrOwner(address spender, uint256 tokneId)** : 내부 함수 - token의 소유자이거나, 승인을 받은 계정인지를 확인하는 함수이다.
+
+**19. \_safeMint(address to, uint256 tokenId)** : 내부 함수 - 특정 주소에 토큰 ID를 안전하게 발행하는 함수이다.
+
+**20. \_safeMint(address to, uint256 tokenId, bytes memory data)** : 내부 함수 - 특정 주소에 토큰 ID를 안전하게 발행하고, 데이터를 전달하는 함수이다.
+
+**21. \_mint(address to, uint256 tokenId)** : 내부 함수 - 특정 주소로 토큰 Id를 발행하는 함수이다.
+
+**22. \_burn(uint256 tokenId)** : 내부 함수 - 특정 토큰 Id를 소각하는 함수이다.
+
+**23. \_transfer(address from, address to, uint256 tokenId)** : 내부 함수 - 토큰을 다른 주소로 이동하는 함수이다.
+
+**24. \_approve(address to, uint256 tokenId)** : 내부 함수 - 특정 주소에 tokenId에 대한 권한을 주는 함수 이다.
+
+**25. \_setApprovalForAll(address owner, address operator, bool approved)** : 내부 함수 - 특정 주소에 대해서 모든 토큰을 승인 하는 함수이다.
+
+**26. \_requireMinted(uint256 tokenId)** : 내부 함수 - tokenId가 발행 되었는지 확인하는 함수이다. require()를 이용한 예외처리를 할 때 사용할 수 있다.
+
+**27. \_checkOnERC721Received(address from, address to, uint256 tokenId, bytes memory data)** : 내부 함수 - 수신하는 주소가 ERC721 인터페이스를 구현했는지 확인하는 함수이다.
+
+**28. \_beforeTokenTransfer(address from, address to, uint256 firstTokenId, uint256 batchSize)** : 내부함수 - 토큰을 이동시키기 전에 실행하는 로직이며, 커스텀하여 사용할 수 있다. 4번째 인자값의 batchSize는 한번에 보내게 되는 NFT의 수량이다.
+
+**29. \_afterTokenTransfer(address from, address to, uint256 firstTokenId, uint256 batchSize)** : 내부함수 - 토큰을 이동한 후에 실행하는 로직이며, 커스텀하여 사용할 수 있다. 4번째 인자값의 batchSize는 한번에 보내게 되는 NFT의 수량이다.
+
+**30. \_\_unsafe_increaseBalance(address account, uint256 amount)** : 내부함수 - 특정 주소의 토큰 잔액을 증가시키는 내부 함수이다.
+
 .
 .
 .

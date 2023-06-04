@@ -37,7 +37,7 @@ const AppleShop = ({ web3, account }) => {
     useEffect(() => {
         //CALL
         if (!web3) return
-        const instance = new web3.eth.Contract(AppleShopContract.abi, "0x597d8e20f66c89c1d2b38817f1af3588c7156d8c")
+        const instance = new web3.eth.Contract(AppleShopContract.abi, "0x12fBD0baf18150191cB8885071593A5f59806564")
         setDeployed(instance)
     }, [])
 
