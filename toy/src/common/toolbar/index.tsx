@@ -10,7 +10,7 @@ export const Footer = () => {
 
     const dispatch = useDispatch<ThunkDispatch<RootState, {}, AnyAction>>()
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-        const targetElement = e.target as HTMLDivElement
+        const targetElement = e.target
         const data = targetElement.id
         data && dispatch(changeMenu(data))
     }
